@@ -18,6 +18,10 @@ const MessagesPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [showCallDialog, setShowCallDialog] = useState(false);
+  const [callType, setCallType] = useState('audio');
+  const fileInputRef = useRef(null);
+  const messagesEndRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
