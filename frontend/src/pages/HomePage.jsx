@@ -208,9 +208,13 @@ const HomePage = () => {
         <Card className="glass-effect p-6 mb-8 border-slate-700">
           <div className="flex gap-4">
             <Avatar>
-              <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white">
-                {user?.username[0]?.toUpperCase()}
-              </AvatarFallback>
+              {user?.avatar_url ? (
+                <img src={user.avatar_url} alt={user.username} className="w-full h-full object-cover" />
+              ) : (
+                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white">
+                  {user?.username[0]?.toUpperCase()}
+                </AvatarFallback>
+              )}
             </Avatar>
             <div className="flex-1">
               <Textarea
