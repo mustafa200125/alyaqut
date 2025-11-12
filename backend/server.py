@@ -558,6 +558,218 @@ async def is_following(user_id: str, current_user: dict = Depends(get_current_us
     return {"is_following": follow is not None}
 
 
+# =============== Friendship Routes ===============
+
+@api_router.post("/users/{user_id}/friend-request")
+async def send_friend_request(user_id: str, current_user: dict = Depends(get_current_user)):
+    if user_id == current_user['id']:
+        raise HTTPException(status_code=400, detail="Cannot send friend request to yourself")
+    
+    target_user = await db.users.find_one({"id": user_id})
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Check if already friends
+    existing_friendship = await db.friendships.find_one({
+        "$or": [
+            {"user_id": current_user['id'], "friend_id": user_id, "status": "accepted"},
+            {"user_id": user_id, "friend_id": current_user['id'], "status": "accepted"}
+        ]
+    })
+    if existing_friendship:
+        return {"message": "Already friends"}
+    
+    # Check if request already sent
+    existing_request = await db.friendships.find_one({
+        "user_id": current_user['id'],
+        "friend_id": user_id,
+        "status": "pending"
+    })
+    if existing_request:
+        return {"message": "Friend request already sent"}
+    
+    # Create friend request
+    friendship = {
+        "id": str(uuid.uuid4()),
+        "user_id": current_user['id'],
+        "friend_id": user_id,
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.friendships.insert_one(friendship)
+    
+    return {"message": "Friend request sent"}
+
+@api_router.post("/users/{user_id}/accept-friend")
+async def accept_friend_request(user_id: str, current_user: dict = Depends(get_current_user)):
+    friendship = await db.friendships.find_one({
+        "user_id": user_id,
+        "friend_id": current_user['id'],
+        "status": "pending"
+    })
+    
+    if not friendship:
+        raise HTTPException(status_code=404, detail="Friend request not found")
+    
+    await db.friendships.update_one(
+        {"id": friendship['id']},
+        {"$set": {"status": "accepted"}}
+    )
+    
+    return {"message": "Friend request accepted"}
+
+@api_router.delete("/users/{user_id}/friend")
+async def remove_friend(user_id: str, current_user: dict = Depends(get_current_user)):
+    result = await db.friendships.delete_one({
+        "$or": [
+            {"user_id": current_user['id'], "friend_id": user_id},
+            {"user_id": user_id, "friend_id": current_user['id']}
+        ]
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Friendship not found")
+    
+    return {"message": "Friend removed"}
+
+@api_router.get("/users/{user_id}/friendship-status")
+async def get_friendship_status(user_id: str, current_user: dict = Depends(get_current_user)):
+    # Check if friends
+    friendship = await db.friendships.find_one({
+        "$or": [
+            {"user_id": current_user['id'], "friend_id": user_id, "status": "accepted"},
+            {"user_id": user_id, "friend_id": current_user['id'], "status": "accepted"}
+        ]
+    })
+    if friendship:
+        return {"status": "friends"}
+    
+    # Check if pending request sent by current user
+    pending_sent = await db.friendships.find_one({
+        "user_id": current_user['id'],
+        "friend_id": user_id,
+        "status": "pending"
+    })
+    if pending_sent:
+        return {"status": "pending_sent"}
+    
+    # Check if pending request received
+    pending_received = await db.friendships.find_one({
+        "user_id": user_id,
+        "friend_id": current_user['id'],
+        "status": "pending"
+    })
+    if pending_received:
+        return {"status": "pending_received"}
+    
+    return {"status": "none"}
+
+@api_router.get("/users/friends")
+async def get_friends(current_user: dict = Depends(get_current_user)):
+    friendships = await db.friendships.find({
+        "$or": [
+            {"user_id": current_user['id'], "status": "accepted"},
+            {"friend_id": current_user['id'], "status": "accepted"}
+        ]
+    }, {"_id": 0}).to_list(1000)
+    
+    friend_ids = []
+    for friendship in friendships:
+        if friendship['user_id'] == current_user['id']:
+            friend_ids.append(friendship['friend_id'])
+        else:
+            friend_ids.append(friendship['user_id'])
+    
+    users = await db.users.find(
+        {"id": {"$in": friend_ids}},
+        {"_id": 0, "password_hash": 0}
+    ).to_list(1000)
+    
+    for user in users:
+        if user['created_at']:
+            user['created_at'] = datetime.fromisoformat(user['created_at'])
+    
+    return users
+
+
+# =============== Block Routes ===============
+
+@api_router.post("/users/{user_id}/block")
+async def block_user(user_id: str, current_user: dict = Depends(get_current_user)):
+    if user_id == current_user['id']:
+        raise HTTPException(status_code=400, detail="Cannot block yourself")
+    
+    target_user = await db.users.find_one({"id": user_id})
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Check if already blocked
+    existing_block = await db.blocks.find_one({
+        "blocker_id": current_user['id'],
+        "blocked_id": user_id
+    })
+    if existing_block:
+        return {"message": "Already blocked"}
+    
+    # Create block
+    block = {
+        "id": str(uuid.uuid4()),
+        "blocker_id": current_user['id'],
+        "blocked_id": user_id,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.blocks.insert_one(block)
+    
+    # Remove friendship if exists
+    await db.friendships.delete_many({
+        "$or": [
+            {"user_id": current_user['id'], "friend_id": user_id},
+            {"user_id": user_id, "friend_id": current_user['id']}
+        ]
+    })
+    
+    # Remove follow if exists
+    await db.follows.delete_many({
+        "$or": [
+            {"follower_id": current_user['id'], "following_id": user_id},
+            {"follower_id": user_id, "following_id": current_user['id']}
+        ]
+    })
+    
+    return {"message": "User blocked"}
+
+@api_router.delete("/users/{user_id}/block")
+async def unblock_user(user_id: str, current_user: dict = Depends(get_current_user)):
+    result = await db.blocks.delete_one({
+        "blocker_id": current_user['id'],
+        "blocked_id": user_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Block not found")
+    
+    return {"message": "User unblocked"}
+
+@api_router.get("/users/{user_id}/is-blocked")
+async def is_blocked(user_id: str, current_user: dict = Depends(get_current_user)):
+    # Check if current user blocked the target user
+    blocked_by_me = await db.blocks.find_one({
+        "blocker_id": current_user['id'],
+        "blocked_id": user_id
+    })
+    
+    # Check if current user is blocked by target user
+    blocked_me = await db.blocks.find_one({
+        "blocker_id": user_id,
+        "blocked_id": current_user['id']
+    })
+    
+    return {
+        "blocked_by_me": blocked_by_me is not None,
+        "blocked_me": blocked_me is not None
+    }
+
+
 # =============== Messages Routes ===============
 
 @api_router.post("/messages", response_model=Message)
