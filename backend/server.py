@@ -329,7 +329,25 @@ async def create_post(post_data: PostCreate, current_user: dict = Depends(get_cu
 
 @api_router.get("/posts", response_model=List[Post])
 async def get_posts(current_user: dict = Depends(get_current_user)):
-    posts = await db.posts.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    # Get blocked users
+    blocks = await db.blocks.find({
+        "$or": [
+            {"blocker_id": current_user['id']},
+            {"blocked_id": current_user['id']}
+        ]
+    }, {"_id": 0}).to_list(1000)
+    
+    blocked_user_ids = set()
+    for block in blocks:
+        if block['blocker_id'] == current_user['id']:
+            blocked_user_ids.add(block['blocked_id'])
+        else:
+            blocked_user_ids.add(block['blocker_id'])
+    
+    # Get posts excluding blocked users
+    posts = await db.posts.find({
+        "user_id": {"$nin": list(blocked_user_ids)}
+    }, {"_id": 0}).sort("created_at", -1).to_list(1000)
     
     for post in posts:
         if post['created_at']:
