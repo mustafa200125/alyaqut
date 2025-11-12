@@ -372,52 +372,94 @@ const MessagesPage = () => {
 
                 {/* Message Input with Media Buttons */}
                 <div className="space-y-3">
-                  <div className="flex gap-2">
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      className="hidden"
-                      accept="image/*,video/*"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                          const isVideo = file.type.startsWith('video/');
-                          handleFileSelect(e, isVideo ? 'video' : 'image');
-                        }
-                      }}
-                    />
-                    
-                    <Button
-                      onClick={() => {
-                        fileInputRef.current.accept = 'image/*';
-                        fileInputRef.current.click();
-                      }}
-                      size="sm"
-                      variant="outline"
-                      className="border-slate-600 text-slate-300 hover:bg-slate-700"
-                      title="إرسال صورة"
-                    >
-                      <Image className="w-4 h-4" />
-                    </Button>
-                    
-                    <Button
-                      onClick={() => {
-                        fileInputRef.current.accept = 'video/*';
-                        fileInputRef.current.click();
-                      }}
-                      size="sm"
-                      variant="outline"
-                      className="border-slate-600 text-slate-300 hover:bg-slate-700"
-                      title="إرسال فيديو"
-                    >
-                      <Film className="w-4 h-4" />
-                    </Button>
+                  {isRecording ? (
+                    /* Recording Interface */
+                    <div className="glass-effect rounded-lg p-4 border border-red-500">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
+                          <span className="text-white font-semibold">جاري التسجيل...</span>
+                          <span className="text-blue-400 font-mono">{formatTime(recordingTime)}</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={cancelRecording}
+                            size="sm"
+                            variant="outline"
+                            className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                          >
+                            إلغاء
+                          </Button>
+                          <Button
+                            onClick={stopRecording}
+                            size="sm"
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                          >
+                            <Square className="w-4 h-4 mr-2" />
+                            إيقاف وإرسال
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Normal Input Interface */
+                    <div className="flex gap-2">
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        accept="image/*,video/*"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            const isVideo = file.type.startsWith('video/');
+                            handleFileSelect(e, isVideo ? 'video' : 'image');
+                          }
+                        }}
+                      />
+                      
+                      <Button
+                        onClick={() => {
+                          fileInputRef.current.accept = 'image/*';
+                          fileInputRef.current.click();
+                        }}
+                        size="sm"
+                        variant="outline"
+                        className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                        title="إرسال صورة"
+                      >
+                        <Image className="w-4 h-4" />
+                      </Button>
+                      
+                      <Button
+                        onClick={() => {
+                          fileInputRef.current.accept = 'video/*';
+                          fileInputRef.current.click();
+                        }}
+                        size="sm"
+                        variant="outline"
+                        className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                        title="إرسال فيديو"
+                      >
+                        <Film className="w-4 h-4" />
+                      </Button>
 
-                    <Input
-                      data-testid="message-input"
-                      value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                      <Button
+                        onClick={startRecording}
+                        size="sm"
+                        variant="outline"
+                        className="border-red-500 text-red-400 hover:bg-red-500/10"
+                        title="تسجيل رسالة صوتية"
+                        data-testid="voice-record-btn"
+                      >
+                        <Mic className="w-4 h-4" />
+                      </Button>
+
+                      <Input
+                        data-testid="message-input"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="اكتب رسالة..."
                       className="flex-1 bg-slate-800/50 border-slate-600 text-white"
                     />
