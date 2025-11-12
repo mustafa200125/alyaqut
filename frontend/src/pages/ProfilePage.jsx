@@ -58,8 +58,14 @@ const ProfilePage = () => {
       setFollowing(followingRes.data);
 
       if (!isOwnProfile) {
-        const followRes = await axios.get(`${API}/users/${userId}/is-following`);
+        const [followRes, friendshipRes, blockRes] = await Promise.all([
+          axios.get(`${API}/users/${userId}/is-following`),
+          axios.get(`${API}/users/${userId}/friendship-status`),
+          axios.get(`${API}/users/${userId}/is-blocked`)
+        ]);
         setIsFollowing(followRes.data.is_following);
+        setFriendshipStatus(friendshipRes.data.status);
+        setIsBlocked(blockRes.data.blocked_by_me || blockRes.data.blocked_me);
       }
     } catch (error) {
       console.error('Failed to fetch user data:', error);
