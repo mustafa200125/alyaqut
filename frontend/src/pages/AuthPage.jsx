@@ -19,6 +19,7 @@ const AuthPage = () => {
     username: ''
   });
   const [verificationCode, setVerificationCode] = useState('');
+  const [serverCode, setServerCode] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -38,7 +39,8 @@ const AuthPage = () => {
         navigate('/home');
       } else {
         const response = await axios.post(`${API}/auth/register`, formData);
-        toast.success('تم إرسال كود التحقق');
+        setServerCode(response.data.code);
+        toast.success('تم إنشاء كود التحقق');
         setShowVerification(true);
       }
     } catch (error) {
