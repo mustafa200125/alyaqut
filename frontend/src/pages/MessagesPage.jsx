@@ -263,24 +263,71 @@ const MessagesPage = () => {
                       </div>
                     ))}
                   </div>
+                  <div ref={messagesEndRef} />
                 </ScrollArea>
 
-                <div className="flex gap-2">
-                  <Input
-                    data-testid="message-input"
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                    placeholder="اكتب رسالة..."
-                    className="flex-1 bg-slate-800/50 border-slate-600 text-white"
-                  />
-                  <Button 
-                    data-testid="send-message-btn"
-                    onClick={sendMessage}
-                    className="btn-sapphire"
-                  >
-                    <Send className="w-5 h-5" />
-                  </Button>
+                {/* Message Input with Media Buttons */}
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      accept="image/*,video/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const isVideo = file.type.startsWith('video/');
+                          handleFileSelect(e, isVideo ? 'video' : 'image');
+                        }
+                      }}
+                    />
+                    
+                    <Button
+                      onClick={() => {
+                        fileInputRef.current.accept = 'image/*';
+                        fileInputRef.current.click();
+                      }}
+                      size="sm"
+                      variant="outline"
+                      className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                      title="إرسال صورة"
+                    >
+                      <Image className="w-4 h-4" />
+                    </Button>
+                    
+                    <Button
+                      onClick={() => {
+                        fileInputRef.current.accept = 'video/*';
+                        fileInputRef.current.click();
+                      }}
+                      size="sm"
+                      variant="outline"
+                      className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                      title="إرسال فيديو"
+                    >
+                      <Film className="w-4 h-4" />
+                    </Button>
+
+                    <Input
+                      data-testid="message-input"
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                      placeholder="اكتب رسالة..."
+                      className="flex-1 bg-slate-800/50 border-slate-600 text-white"
+                    />
+                    <Button 
+                      data-testid="send-message-btn"
+                      onClick={() => sendMessage()}
+                      className="btn-sapphire"
+                    >
+                      <Send className="w-5 h-5" />
+                    </Button>
+                  </div>
+                  <p className="text-xs text-slate-400 text-center">
+                    الصور: حتى 50 ميجابايت | الفيديوهات: حتى 500 ميجابايت بأعلى جودة
+                  </p>
                 </div>
               </>
             ) : (
@@ -291,6 +338,17 @@ const MessagesPage = () => {
           </Card>
         </div>
       </div>
+
+      {/* Video Call Dialog */}
+      <VideoCallDialog
+        open={showCallDialog}
+        onClose={() => setShowCallDialog(false)}
+        isVideo={callType === 'video'}
+        partnerName={selectedUser?.username || ''}
+        onCallEnd={() => {
+          toast.success('انتهت المكالمة');
+        }}
+      />
     </div>
   );
 };
