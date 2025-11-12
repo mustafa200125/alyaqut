@@ -22,6 +22,7 @@ const MessagesPage = () => {
   const [newMessage, setNewMessage] = useState('');
   const [showCallDialog, setShowCallDialog] = useState(false);
   const [callType, setCallType] = useState('audio');
+  const [showYouTubePlayer, setShowYouTubePlayer] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [audioBlob, setAudioBlob] = useState(null);
