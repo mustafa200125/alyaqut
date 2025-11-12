@@ -346,10 +346,15 @@ const MessagesPage = () => {
                               style={{ maxHeight: '400px' }}
                             />
                           )}
+                          {message.message_type === 'audio' && message.media_url && (
+                            <div className="p-2">
+                              <AudioPlayer audioUrl={message.media_url} />
+                            </div>
+                          )}
                           {(message.message_type === 'text' || !message.message_type) && (
                             <p className="whitespace-pre-wrap p-3">{message.content}</p>
                           )}
-                          {message.media_url && message.message_type !== 'text' && (
+                          {message.media_url && message.message_type !== 'text' && message.message_type !== 'audio' && (
                             <p className="text-xs px-3 pb-2">{message.content}</p>
                           )}
                           <p className="text-xs opacity-70 px-3 pb-2">
