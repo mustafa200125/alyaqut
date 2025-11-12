@@ -150,6 +150,46 @@ const ProfilePage = () => {
     }
   };
 
+  const handleFriendRequest = async () => {
+    try {
+      if (friendshipStatus === 'friends') {
+        await axios.delete(`${API}/users/${userId}/friend`);
+        toast.success('تمت إزالة الصداقة');
+        setFriendshipStatus('none');
+      } else if (friendshipStatus === 'pending_sent') {
+        toast.info('تم إرسال طلب الصداقة مسبقاً');
+      } else if (friendshipStatus === 'pending_received') {
+        await axios.post(`${API}/users/${userId}/accept-friend`);
+        toast.success('تم قبول طلب الصداقة');
+        setFriendshipStatus('friends');
+      } else {
+        await axios.post(`${API}/users/${userId}/friend-request`);
+        toast.success('تم إرسال طلب الصداقة');
+        setFriendshipStatus('pending_sent');
+      }
+      fetchUserData();
+    } catch (error) {
+      toast.error('حدث خطأ');
+    }
+  };
+
+  const handleBlock = async () => {
+    try {
+      if (isBlocked) {
+        await axios.delete(`${API}/users/${userId}/block`);
+        toast.success('تم إلغاء الحظر');
+        setIsBlocked(false);
+      } else {
+        await axios.post(`${API}/users/${userId}/block`);
+        toast.success('تم حظر المستخدم');
+        setIsBlocked(true);
+        navigate('/home');
+      }
+    } catch (error) {
+      toast.error('حدث خطأ');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 flex items-center justify-center">
