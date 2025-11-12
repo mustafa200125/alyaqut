@@ -102,9 +102,30 @@ const ProfilePage = () => {
       gender: user?.gender || '',
       country: user?.country || '',
       city: user?.city || '',
-      profession: user?.profession || ''
+      profession: user?.profession || '',
+      avatar_url: user?.avatar_url || ''
     });
+    setImagePreview(user?.avatar_url || null);
     setIsEditDialogOpen(true);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('حجم الصورة كبير جداً. الحد الأقصى 2 ميجابايت');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        setImagePreview(base64String);
+        setEditData({...editData, avatar_url: base64String});
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSaveProfile = async () => {
