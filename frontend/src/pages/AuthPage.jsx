@@ -93,9 +93,20 @@ const AuthPage = () => {
             <h2 className="text-3xl font-bold text-white mb-2" style={{fontFamily: 'Playfair Display'}}>
               التحقق من البريد
             </h2>
-            <p className="text-slate-300">
-              أدخل الكود المرسل إلى {formData.email}
+            <p className="text-slate-300 mb-4">
+              أدخل الكود للتحقق من حسابك
             </p>
+            
+            {/* Display the verification code */}
+            <div className="bg-blue-600/20 border border-blue-500 rounded-lg p-4 mb-6">
+              <p className="text-sm text-blue-300 mb-2">كود التحقق الخاص بك:</p>
+              <p className="text-3xl font-bold text-blue-400 tracking-wider" style={{fontFamily: 'monospace'}}>
+                {serverCode}
+              </p>
+              <p className="text-xs text-slate-400 mt-2">
+                انسخ هذا الكود وأدخله بالأسفل
+              </p>
+            </div>
           </div>
 
           <div className="flex justify-center mb-6" dir="ltr">
@@ -131,7 +142,7 @@ const AuthPage = () => {
             variant="ghost"
             className="w-full text-blue-400 hover:text-blue-300"
           >
-            إعادة إرسال الكود
+            إنشاء كود جديد
           </Button>
         </Card>
       </div>
