@@ -51,22 +51,72 @@ const MessagesPage = () => {
     }
   };
 
-  const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedUser) return;
+  const sendMessage = async (messageData = null) => {
+    const dataToSend = messageData || {
+      receiver_id: selectedUser.id,
+      content: newMessage,
+      message_type: 'text'
+    };
+
+    if (!dataToSend.content && !dataToSend.media_url) return;
 
     try {
-      await axios.post(`${API}/messages`, {
-        receiver_id: selectedUser.id,
-        content: newMessage
-      });
-      setNewMessage('');
+      await axios.post(`${API}/messages`, dataToSend);
+      if (!messageData) setNewMessage('');
       const response = await axios.get(`${API}/messages/${selectedUser.id}`);
       setMessages(response.data);
       fetchConversations();
+      scrollToBottom();
     } catch (error) {
       toast.error('فشل إرسال الرسالة');
     }
   };
+
+  const handleFileSelect = async (event, type) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Check file size
+    const maxSize = type === 'video' ? 500 * 1024 * 1024 : 50 * 1024 * 1024; // 500MB for video, 50MB for images
+    if (file.size > maxSize) {
+      toast.error(`الملف كبير جداً. الحد الأقصى ${type === 'video' ? '500' : '50'} ميجابايت`);
+      return;
+    }
+
+    toast.info('جاري تحميل الملف...');
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64Data = reader.result;
+        await sendMessage({
+          receiver_id: selectedUser.id,
+          content: type === 'image' ? 'صورة' : 'فيديو',
+          message_type: type,
+          media_url: base64Data,
+          media_size: file.size
+        });
+        toast.success('تم إرسال الملف بنجاح');
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      toast.error('فشل تحميل الملف');
+    }
+  };
+
+  const startCall = (isVideo) => {
+    setCallType(isVideo ? 'video' : 'audio');
+    setShowCallDialog(true);
+    toast.success(isVideo ? 'بدء مكالمة فيديو...' : 'بدء مكالمة صوتية...');
+  };
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
