@@ -16,13 +16,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 const ProfilePage = () => {
   const { userId } = useParams();
-  const { user: currentUser } = useContext(AuthContext);
+  const { user: currentUser, refreshUser } = useContext(AuthContext);
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editData, setEditData] = useState({
+    bio: '',
+    gender: '',
+    country: '',
+    city: '',
+    profession: ''
+  });
   const navigate = useNavigate();
 
   const isOwnProfile = userId === currentUser?.id;
