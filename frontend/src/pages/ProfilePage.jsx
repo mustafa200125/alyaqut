@@ -607,6 +607,14 @@ const ProfilePage = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Image Crop Dialog */}
+      <ImageCropDialog
+        open={showCropDialog}
+        onClose={() => setShowCropDialog(false)}
+        imageSrc={tempImageForCrop}
+        onCropComplete={handleCropComplete}
+      />
     </div>
   );
 };
