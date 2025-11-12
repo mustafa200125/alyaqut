@@ -540,6 +540,16 @@ const MessagesPage = () => {
           toast.success('انتهت المكالمة');
         }}
       />
+
+      {/* Shared YouTube Player */}
+      <SharedYouTubePlayer
+        open={showYouTubePlayer}
+        onClose={() => setShowYouTubePlayer(false)}
+        partnerId={selectedUser?.id}
+        partnerName={selectedUser?.username || ''}
+        currentUserId={user?.id}
+        onSendControl={handleYouTubeControl}
+      />
     </div>
   );
 };
