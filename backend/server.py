@@ -49,6 +49,10 @@ class User(BaseModel):
     username: str
     bio: Optional[str] = ""
     avatar_url: Optional[str] = ""
+    gender: Optional[str] = ""
+    country: Optional[str] = ""
+    city: Optional[str] = ""
+    profession: Optional[str] = ""
     verified: bool = False
     followers_count: int = 0
     following_count: int = 0
