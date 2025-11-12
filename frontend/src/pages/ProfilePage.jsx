@@ -36,6 +36,8 @@ const ProfilePage = () => {
     avatar_url: ''
   });
   const [imagePreview, setImagePreview] = useState(null);
+  const [tempImageForCrop, setTempImageForCrop] = useState(null);
+  const [showCropDialog, setShowCropDialog] = useState(false);
   const navigate = useNavigate();
 
   const isOwnProfile = userId === currentUser?.id;
