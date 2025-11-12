@@ -6,7 +6,7 @@ import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { Avatar, AvatarFallback } from '../components/ui/avatar';
 import { toast } from 'sonner';
-import { ArrowLeft, UserPlus, UserMinus, MessageCircle, Heart, MessageSquare, Edit, MapPin, Briefcase, Users2 } from 'lucide-react';
+import { ArrowLeft, UserPlus, UserMinus, MessageCircle, Heart, MessageSquare, Edit, MapPin, Briefcase, Users2, UserCheck, UserX, Shield } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
 import { Input } from '../components/ui/input';
