@@ -94,6 +94,31 @@ const ProfilePage = () => {
     }
   };
 
+  const handleEditProfile = () => {
+    setEditData({
+      bio: user?.bio || '',
+      gender: user?.gender || '',
+      country: user?.country || '',
+      city: user?.city || '',
+      profession: user?.profession || ''
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      await axios.put(`${API}/users/profile`, editData);
+      toast.success('تم تحديث الملف الشخصي');
+      setIsEditDialogOpen(false);
+      await fetchUserData();
+      if (isOwnProfile) {
+        await refreshUser();
+      }
+    } catch (error) {
+      toast.error('فشل تحديث الملف الشخصي');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 flex items-center justify-center">
