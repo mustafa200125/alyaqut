@@ -8,10 +8,11 @@ import { Card } from '../components/ui/card';
 import { Avatar, AvatarFallback } from '../components/ui/avatar';
 import { ScrollArea } from '../components/ui/scroll-area';
 import { toast } from 'sonner';
-import { ArrowLeft, Send, Phone, Video, Image, Film, Paperclip, Smile, Mic, Square, Play, Pause } from 'lucide-react';
+import { ArrowLeft, Send, Phone, Video, Image, Film, Paperclip, Smile, Mic, Square, Play, Pause, Youtube } from 'lucide-react';
 import { Separator } from '../components/ui/separator';
 import VideoCallDialog from '../components/VideoCallDialog';
 import AudioPlayer from '../components/AudioPlayer';
+import SharedYouTubePlayer from '../components/SharedYouTubePlayer';
 
 const MessagesPage = () => {
   const { user } = useContext(AuthContext);
