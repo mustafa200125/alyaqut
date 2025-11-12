@@ -809,7 +809,12 @@ async def send_message(message_data: MessageCreate, current_user: dict = Depends
         receiver_id=message_data.receiver_id,
         sender_username=current_user['username'],
         receiver_username=receiver['username'],
-        content=message_data.content
+        sender_avatar=current_user.get('avatar_url', ''),
+        receiver_avatar=receiver.get('avatar_url', ''),
+        content=message_data.content,
+        message_type=message_data.message_type or "text",
+        media_url=message_data.media_url,
+        media_size=message_data.media_size
     )
     
     message_dict = message.model_dump()
