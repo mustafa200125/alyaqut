@@ -331,7 +331,7 @@ const ProfilePage = () => {
                               >
                                 اختر صورة
                               </Label>
-                              <p className="text-xs text-slate-400 mt-2">الحد الأقصى: 2 ميجابايت</p>
+                              <p className="text-xs text-slate-400 mt-2">اختر صورة لقصها وتحديد حجمها (حتى 5 ميجابايت)</p>
                             </div>
                           </div>
                         </div>
