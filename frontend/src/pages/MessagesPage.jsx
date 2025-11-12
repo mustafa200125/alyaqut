@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext, API } from '../App';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -8,8 +8,9 @@ import { Card } from '../components/ui/card';
 import { Avatar, AvatarFallback } from '../components/ui/avatar';
 import { ScrollArea } from '../components/ui/scroll-area';
 import { toast } from 'sonner';
-import { ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft, Send, Phone, Video, Image, Film, Paperclip, Smile } from 'lucide-react';
 import { Separator } from '../components/ui/separator';
+import VideoCallDialog from '../components/VideoCallDialog';
 
 const MessagesPage = () => {
   const { user } = useContext(AuthContext);
