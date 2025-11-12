@@ -123,20 +123,25 @@ const ProfilePage = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Check file size (max 2MB)
-      if (file.size > 2 * 1024 * 1024) {
-        toast.error('حجم الصورة كبير جداً. الحد الأقصى 2 ميجابايت');
+      // Check file size (max 5MB for original)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('حجم الصورة كبير جداً. الحد الأقصى 5 ميجابايت');
         return;
       }
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result;
-        setImagePreview(base64String);
-        setEditData({...editData, avatar_url: base64String});
+        setTempImageForCrop(reader.result);
+        setShowCropDialog(true);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleCropComplete = (croppedImage) => {
+    setImagePreview(croppedImage);
+    setEditData({...editData, avatar_url: croppedImage});
+    toast.success('تم قص الصورة بنجاح');
   };
 
   const handleSaveProfile = async () => {
