@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { ArrowLeft, Send, Phone, Video, Image, Film, Paperclip, Smile, Mic, Square, Play, Pause } from 'lucide-react';
 import { Separator } from '../components/ui/separator';
 import VideoCallDialog from '../components/VideoCallDialog';
+import AudioPlayer from '../components/AudioPlayer';
 
 const MessagesPage = () => {
   const { user } = useContext(AuthContext);
