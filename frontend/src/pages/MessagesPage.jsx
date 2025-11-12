@@ -176,15 +176,42 @@ const MessagesPage = () => {
           <Card className="glass-effect border-slate-700 p-6 col-span-1 md:col-span-2 flex flex-col">
             {selectedUser ? (
               <>
-                <div className="flex items-center gap-3 mb-6">
-                  <Avatar>
-                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white">
-                      {selectedUser.username[0]?.toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h3 className="font-bold text-white">{selectedUser.username}</h3>
-                    <p className="text-sm text-slate-400">{selectedUser.email}</p>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <Avatar>
+                      {selectedUser.avatar_url ? (
+                        <img src={selectedUser.avatar_url} alt={selectedUser.username} className="w-full h-full object-cover" />
+                      ) : (
+                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white">
+                          {selectedUser.username[0]?.toUpperCase()}
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                    <div>
+                      <h3 className="font-bold text-white">{selectedUser.username}</h3>
+                      <p className="text-sm text-slate-400">نشط الآن</p>
+                    </div>
+                  </div>
+                  
+                  {/* Call Buttons */}
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => startCall(false)}
+                      size="sm"
+                      variant="outline"
+                      className="border-blue-500 text-blue-400 hover:bg-blue-500/10"
+                      data-testid="audio-call-btn"
+                    >
+                      <Phone className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      onClick={() => startCall(true)}
+                      size="sm"
+                      className="btn-sapphire"
+                      data-testid="video-call-btn"
+                    >
+                      <Video className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
 
@@ -198,14 +225,35 @@ const MessagesPage = () => {
                         className={`flex ${message.sender_id === user.id ? 'justify-start' : 'justify-end'}`}
                       >
                         <div
-                          className={`max-w-[70%] p-3 rounded-lg ${
+                          className={`max-w-[70%] rounded-lg ${
                             message.sender_id === user.id
                               ? 'bg-blue-600 text-white'
                               : 'bg-slate-700 text-white'
                           }`}
                         >
-                          <p className="whitespace-pre-wrap">{message.content}</p>
-                          <p className="text-xs opacity-70 mt-1">
+                          {message.message_type === 'image' && message.media_url && (
+                            <img 
+                              src={message.media_url} 
+                              alt="صورة" 
+                              className="rounded-lg max-w-full cursor-pointer hover:opacity-90"
+                              onClick={() => window.open(message.media_url, '_blank')}
+                            />
+                          )}
+                          {message.message_type === 'video' && message.media_url && (
+                            <video 
+                              src={message.media_url} 
+                              controls 
+                              className="rounded-lg max-w-full"
+                              style={{ maxHeight: '400px' }}
+                            />
+                          )}
+                          {(message.message_type === 'text' || !message.message_type) && (
+                            <p className="whitespace-pre-wrap p-3">{message.content}</p>
+                          )}
+                          {message.media_url && message.message_type !== 'text' && (
+                            <p className="text-xs px-3 pb-2">{message.content}</p>
+                          )}
+                          <p className="text-xs opacity-70 px-3 pb-2">
                             {new Date(message.created_at).toLocaleTimeString('ar', {
                               hour: '2-digit',
                               minute: '2-digit'
