@@ -20,8 +20,14 @@ const MessagesPage = () => {
   const [newMessage, setNewMessage] = useState('');
   const [showCallDialog, setShowCallDialog] = useState(false);
   const [callType, setCallType] = useState('audio');
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [audioBlob, setAudioBlob] = useState(null);
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const recordingIntervalRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
