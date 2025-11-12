@@ -2,26 +2,20 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Search, Play, Pause, Volume2, VolumeX, Maximize2, X } from 'lucide-react';
+import { Search, Play, Pause, Volume2, VolumeX, Link, X } from 'lucide-react';
 import { Slider } from './ui/slider';
 import { toast } from 'sonner';
-import { ScrollArea } from './ui/scroll-area';
 
 const SharedYouTubePlayer = ({ open, onClose, partnerId, partnerName, onSendControl, currentUserId }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [videoUrl, setVideoUrl] = useState('');
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(50);
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isSearching, setIsSearching] = useState(false);
   const playerRef = useRef(null);
   const intervalRef = useRef(null);
-
-  // YouTube API Key - يجب أن يكون من المتغيرات البيئية في الإنتاج
-  const YOUTUBE_API_KEY = 'AIzaSyDummy'; // استخدم مفتاح حقيقي
 
   useEffect(() => {
     // Load YouTube IFrame API
@@ -45,41 +39,48 @@ const SharedYouTubePlayer = ({ open, onClose, partnerId, partnerName, onSendCont
     }
   }, [selectedVideo]);
 
-  const searchYouTube = async () => {
-    if (!searchQuery.trim()) return;
+  // استخراج video ID من رابط يوتيوب
+  const extractVideoId = (url) => {
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+      /^([a-zA-Z0-9_-]{11})$/ // إذا كان ID مباشرة
+    ];
     
-    setIsSearching(true);
-    try {
-      // بحث بسيط باستخدام YouTube Data API
-      // في حالة الإنتاج، يجب استخدام API حقيقية من الباك اند
-      const mockResults = [
-        {
-          id: 'dQw4w9WgXcQ',
-          title: searchQuery + ' - نتيجة 1',
-          thumbnail: `https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg`,
-          channel: 'قناة تجريبية'
-        },
-        {
-          id: 'jNQXAC9IVRw',
-          title: searchQuery + ' - نتيجة 2',
-          thumbnail: `https://img.youtube.com/vi/jNQXAC9IVRw/mqdefault.jpg`,
-          channel: 'قناة تجريبية 2'
-        },
-        {
-          id: '9bZkp7q19f0',
-          title: searchQuery + ' - نتيجة 3',
-          thumbnail: `https://img.youtube.com/vi/9bZkp7q19f0/mqdefault.jpg`,
-          channel: 'قناة تجريبية 3'
-        }
-      ];
-      setSearchResults(mockResults);
-      toast.success('تم البحث بنجاح');
-    } catch (error) {
-      console.error('Search error:', error);
-      toast.error('فشل البحث');
-    } finally {
-      setIsSearching(false);
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        return match[1];
+      }
     }
+    return null;
+  };
+
+  const handleLoadVideo = () => {
+    if (!videoUrl.trim()) {
+      toast.error('الرجاء إدخال رابط يوتيوب');
+      return;
+    }
+
+    const videoId = extractVideoId(videoUrl);
+    
+    if (!videoId) {
+      toast.error('رابط يوتيوب غير صحيح');
+      return;
+    }
+
+    const video = {
+      id: videoId,
+      title: 'فيديو يوتيوب',
+      thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+    };
+
+    setSelectedVideo(video);
+    onSendControl({
+      type: 'select_video',
+      video: video,
+      userId: currentUserId
+    });
+    toast.success('تم تحميل الفيديو');
   };
 
   const initializePlayer = () => {
@@ -91,9 +92,13 @@ const SharedYouTubePlayer = ({ open, onClose, partnerId, partnerName, onSendCont
       videoId: selectedVideo.id,
       playerVars: {
         autoplay: 0,
-        controls: 0,
+        controls: 1,
         modestbranding: 1,
-        rel: 0
+        rel: 0,
+        fs: 1,
+        cc_load_policy: 0,
+        iv_load_policy: 3,
+        autohide: 1
       },
       events: {
         onReady: onPlayerReady,
@@ -119,17 +124,6 @@ const SharedYouTubePlayer = ({ open, onClose, partnerId, partnerName, onSendCont
     } else if (event.data === window.YT.PlayerState.PAUSED) {
       setIsPlaying(false);
     }
-  };
-
-  const handleSelectVideo = (video) => {
-    setSelectedVideo(video);
-    // إرسال إشعار للطرف الآخر
-    onSendControl({
-      type: 'select_video',
-      video: video,
-      userId: currentUserId
-    });
-    toast.success(`تم اختيار: ${video.title}`);
   };
 
   const togglePlay = () => {
@@ -158,11 +152,6 @@ const SharedYouTubePlayer = ({ open, onClose, partnerId, partnerName, onSendCont
     if (playerRef.current) {
       playerRef.current.setVolume(newVolume);
     }
-    onSendControl({
-      type: 'volume',
-      volume: newVolume,
-      userId: currentUserId
-    });
   };
 
   const toggleMute = () => {
@@ -216,10 +205,6 @@ const SharedYouTubePlayer = ({ open, onClose, partnerId, partnerName, onSendCont
           playerRef.current.seekTo(control.time);
         }
         break;
-      case 'volume':
-        setVolume(control.volume);
-        playerRef.current.setVolume(control.volume);
-        break;
       case 'seek':
         playerRef.current.seekTo(control.time);
         setCurrentTime(control.time);
@@ -229,7 +214,6 @@ const SharedYouTubePlayer = ({ open, onClose, partnerId, partnerName, onSendCont
     }
   };
 
-  // تصدير دالة للاستخدام من الخارج
   useEffect(() => {
     window.handleYouTubeControl = handleIncomingControl;
     return () => {
@@ -239,10 +223,15 @@ const SharedYouTubePlayer = ({ open, onClose, partnerId, partnerName, onSendCont
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="glass-effect border-slate-700 max-w-6xl">
+      <DialogContent className="glass-effect border-slate-700 max-w-5xl">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center justify-between">
-            <span>مشاهدة يوتيوب مع {partnerName}</span>
+            <span className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center">
+                <Play className="w-5 h-5 text-white" fill="white" />
+              </div>
+              مشاهدة يوتيوب مع {partnerName}
+            </span>
             <Button
               onClick={onClose}
               variant="ghost"
@@ -255,70 +244,71 @@ const SharedYouTubePlayer = ({ open, onClose, partnerId, partnerName, onSendCont
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Search Bar */}
-          <div className="flex gap-2">
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && searchYouTube()}
-              placeholder="ابحث عن فيديو أو أغنية..."
-              className="flex-1 bg-slate-800/50 border-slate-600 text-white"
-            />
-            <Button
-              onClick={searchYouTube}
-              disabled={isSearching}
-              className="btn-sapphire"
-            >
-              <Search className="w-5 h-5" />
-            </Button>
-          </div>
-
-          {/* Search Results */}
-          {searchResults.length > 0 && !selectedVideo && (
-            <ScrollArea className="h-64 rounded-lg border border-slate-700 p-4">
-              <div className="grid grid-cols-1 gap-3">
-                {searchResults.map((result) => (
-                  <div
-                    key={result.id}
-                    onClick={() => handleSelectVideo(result)}
-                    className="flex gap-3 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 cursor-pointer transition-colors"
-                  >
-                    <img
-                      src={result.thumbnail}
-                      alt={result.title}
-                      className="w-32 h-20 rounded object-cover"
-                    />
-                    <div className="flex-1">
-                      <h4 className="text-white font-semibold line-clamp-2">
-                        {result.title}
-                      </h4>
-                      <p className="text-slate-400 text-sm mt-1">{result.channel}</p>
-                    </div>
-                  </div>
-                ))}
+          {/* URL Input */}
+          {!selectedVideo && (
+            <div className="space-y-4">
+              <div className="text-center py-8">
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-14 h-14 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">شاهد يوتيوب معاً</h3>
+                <p className="text-slate-400 mb-6">الصق رابط أي فيديو من يوتيوب لمشاهدته مع {partnerName}</p>
               </div>
-            </ScrollArea>
+
+              <div className="glass-effect rounded-lg p-6 space-y-4">
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Link className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <Input
+                      value={videoUrl}
+                      onChange={(e) => setVideoUrl(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleLoadVideo()}
+                      placeholder="https://youtube.com/watch?v=..."
+                      className="bg-slate-800/50 border-slate-600 text-white pl-10"
+                    />
+                  </div>
+                  <Button
+                    onClick={handleLoadVideo}
+                    className="bg-red-600 hover:bg-red-700 text-white px-6"
+                  >
+                    <Play className="w-5 h-5 mr-2" />
+                    تشغيل
+                  </Button>
+                </div>
+                
+                <div className="text-sm text-slate-400 space-y-2">
+                  <p className="font-semibold">أمثلة للروابط المدعومة:</p>
+                  <div className="space-y-1 text-xs">
+                    <p>• https://youtube.com/watch?v=dQw4w9WgXcQ</p>
+                    <p>• https://youtu.be/dQw4w9WgXcQ</p>
+                    <p>• dQw4w9WgXcQ (معرف الفيديو فقط)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
 
           {/* Video Player */}
           {selectedVideo && (
             <div className="space-y-4">
-              <div className="relative bg-black rounded-lg overflow-hidden">
-                <div id="youtube-player" className="w-full h-[400px]"></div>
+              <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl">
+                <div id="youtube-player" className="w-full aspect-video"></div>
               </div>
 
               {/* Controls */}
-              <div className="glass-effect rounded-lg p-4 space-y-3">
+              <div className="glass-effect rounded-lg p-6 space-y-4">
                 <div className="flex items-center gap-4">
                   <Button
                     onClick={togglePlay}
-                    size="sm"
-                    className="btn-sapphire"
+                    size="lg"
+                    className="bg-red-600 hover:bg-red-700 rounded-full w-12 h-12"
                   >
-                    {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                    {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
                   </Button>
 
-                  <div className="flex-1">
+                  <div className="flex-1 space-y-2">
                     <Slider
                       value={[currentTime]}
                       max={duration}
@@ -326,56 +316,54 @@ const SharedYouTubePlayer = ({ open, onClose, partnerId, partnerName, onSendCont
                       onValueChange={handleSeek}
                       className="cursor-pointer"
                     />
+                    <div className="flex justify-between text-xs text-slate-400">
+                      <span>{formatTime(currentTime)}</span>
+                      <span>{formatTime(duration)}</span>
+                    </div>
                   </div>
-
-                  <span className="text-white text-sm min-w-[80px]">
-                    {formatTime(currentTime)} / {formatTime(duration)}
-                  </span>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <Button
-                    onClick={toggleMute}
-                    size="sm"
-                    variant="outline"
-                    className="border-slate-600 text-slate-300"
-                  >
-                    {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                  </Button>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <Button
+                      onClick={toggleMute}
+                      size="sm"
+                      variant="outline"
+                      className="border-slate-600 text-slate-300"
+                    >
+                      {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                    </Button>
 
-                  <div className="flex-1 max-w-xs">
-                    <Slider
-                      value={[volume]}
-                      max={100}
-                      step={1}
-                      onValueChange={handleVolumeChange}
-                      className="cursor-pointer"
-                    />
+                    <div className="flex items-center gap-3 w-32">
+                      <Slider
+                        value={[volume]}
+                        max={100}
+                        step={1}
+                        onValueChange={handleVolumeChange}
+                        className="cursor-pointer"
+                      />
+                      <span className="text-white text-sm min-w-[35px]">{volume}%</span>
+                    </div>
                   </div>
 
-                  <span className="text-white text-sm">{volume}%</span>
+                  <div className="flex items-center gap-2 text-sm">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-slate-300">{partnerName} يشاهد معك</span>
+                  </div>
                 </div>
-
-                <p className="text-slate-400 text-sm text-center">
-                  {partnerName} يشاهد معك الآن
-                </p>
               </div>
 
               {/* Change Video Button */}
               <Button
-                onClick={() => setSelectedVideo(null)}
+                onClick={() => {
+                  setSelectedVideo(null);
+                  setVideoUrl('');
+                }}
                 variant="outline"
-                className="w-full border-slate-600 text-slate-300"
+                className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
               >
                 تغيير الفيديو
               </Button>
-            </div>
-          )}
-
-          {searchResults.length === 0 && !selectedVideo && (
-            <div className="text-center py-12">
-              <Search className="w-16 h-16 text-slate-600 mx-auto mb-4" />
-              <p className="text-slate-400">ابحث عن فيديو أو أغنية لمشاهدتها معاً</p>
             </div>
           )}
         </div>
