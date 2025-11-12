@@ -153,9 +153,7 @@ const AuthPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 flex items-center justify-center p-6">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center mx-auto mb-4">
-            <Sparkles className="w-8 h-8 text-white" />
-          </div>
+          <img src="/logo.jpg" alt="الياقوت" className="w-16 h-16 rounded-xl mx-auto mb-4 object-cover" />
           <h1 className="text-4xl font-bold text-white mb-2" style={{fontFamily: 'Playfair Display'}}>
             الياقوت
           </h1>
