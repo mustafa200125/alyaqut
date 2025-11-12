@@ -244,6 +244,38 @@ const ProfilePage = () => {
                         <DialogTitle className="text-white">تعديل الملف الشخصي</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4 mt-4">
+                        {/* صورة الملف الشخصي */}
+                        <div className="text-center">
+                          <Label className="text-slate-200 mb-2 block">الصورة الشخصية</Label>
+                          <div className="flex flex-col items-center gap-4">
+                            <Avatar className="w-24 h-24">
+                              {imagePreview ? (
+                                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                              ) : (
+                                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white text-2xl">
+                                  {user?.username[0]?.toUpperCase()}
+                                </AvatarFallback>
+                              )}
+                            </Avatar>
+                            <div>
+                              <input
+                                type="file"
+                                id="avatar"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="hidden"
+                              />
+                              <Label
+                                htmlFor="avatar"
+                                className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg inline-block"
+                              >
+                                اختر صورة
+                              </Label>
+                              <p className="text-xs text-slate-400 mt-2">الحد الأقصى: 2 ميجابايت</p>
+                            </div>
+                          </div>
+                        </div>
+
                         <div>
                           <Label htmlFor="bio" className="text-slate-200">النبذة الشخصية</Label>
                           <Textarea
