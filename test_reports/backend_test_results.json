@@ -1,0 +1,105 @@
+{
+  "summary": {
+    "total_tests": 16,
+    "passed_tests": 16,
+    "success_rate": "100.0%"
+  },
+  "results": [
+    {
+      "test": "User Registration",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:45.413751"
+    },
+    {
+      "test": "Email Verification",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:45.455149"
+    },
+    {
+      "test": "Get Current User",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:45.495603"
+    },
+    {
+      "test": "Create Post",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:45.531301"
+    },
+    {
+      "test": "Get Posts",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:45.575273"
+    },
+    {
+      "test": "Like Post",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:45.639803"
+    },
+    {
+      "test": "Unlike Post",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:45.679083"
+    },
+    {
+      "test": "Add Comment",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:45.744921"
+    },
+    {
+      "test": "Get Comments",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:45.785048"
+    },
+    {
+      "test": "Get User Suggestions",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:45.826629"
+    },
+    {
+      "test": "AI Content Suggestions",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:48.107672"
+    },
+    {
+      "test": "AI Content Moderation",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:49.165919"
+    },
+    {
+      "test": "AI Generate Hashtags",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:49.956255"
+    },
+    {
+      "test": "Get Conversations",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:50.035979"
+    },
+    {
+      "test": "Get Stories",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:50.074734"
+    },
+    {
+      "test": "User Login",
+      "success": true,
+      "details": "Status: 200",
+      "timestamp": "2025-11-12T13:57:50.333834"
+    }
+  ]
+}
