@@ -268,9 +268,13 @@ const HomePage = () => {
             <Card key={post.id} className="glass-effect p-6 border-slate-700" data-testid="post-card">
               <div className="flex items-start gap-4 mb-4">
                 <Avatar className="cursor-pointer" onClick={() => navigate(`/profile/${post.user_id}`)}>
-                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white">
-                    {post.username[0]?.toUpperCase()}
-                  </AvatarFallback>
+                  {post.avatar_url ? (
+                    <img src={post.avatar_url} alt={post.username} className="w-full h-full object-cover" />
+                  ) : (
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white">
+                      {post.username[0]?.toUpperCase()}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
                 <div className="flex-1">
                   <h3 
