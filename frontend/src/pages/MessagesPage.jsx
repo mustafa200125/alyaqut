@@ -332,6 +332,7 @@ const MessagesPage = () => {
                       variant="outline"
                       className="border-blue-500 text-blue-400 hover:bg-blue-500/10"
                       data-testid="audio-call-btn"
+                      title="مكالمة صوتية"
                     >
                       <Phone className="w-4 h-4" />
                     </Button>
@@ -340,8 +341,19 @@ const MessagesPage = () => {
                       size="sm"
                       className="btn-sapphire"
                       data-testid="video-call-btn"
+                      title="مكالمة فيديو"
                     >
                       <Video className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      onClick={() => setShowYouTubePlayer(true)}
+                      size="sm"
+                      variant="outline"
+                      className="border-red-500 text-red-400 hover:bg-red-500/10"
+                      data-testid="youtube-btn"
+                      title="مشاهدة يوتيوب معاً"
+                    >
+                      <Youtube className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
