@@ -215,8 +215,38 @@ const MessagesPage = () => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const handleYouTubeControl = async (control) => {
+    try {
+      // إرسال أمر التحكم كرسالة خاصة
+      await sendMessage({
+        receiver_id: selectedUser.id,
+        content: `YouTube Control: ${control.type}`,
+        message_type: 'youtube_control',
+        media_url: JSON.stringify(control)
+      });
+    } catch (error) {
+      console.error('Failed to send YouTube control:', error);
+    }
+  };
+
   useEffect(() => {
     scrollToBottom();
+  }, [messages]);
+
+  // استقبال أوامر يوتيوب من الرسائل
+  useEffect(() => {
+    messages.forEach(message => {
+      if (message.message_type === 'youtube_control' && message.sender_id !== user.id) {
+        try {
+          const control = JSON.parse(message.media_url);
+          if (window.handleYouTubeControl) {
+            window.handleYouTubeControl(control);
+          }
+        } catch (error) {
+          console.error('Failed to parse YouTube control:', error);
+        }
+      }
+    });
   }, [messages]);
 
   return (
