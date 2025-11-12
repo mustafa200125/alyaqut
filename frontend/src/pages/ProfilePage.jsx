@@ -156,11 +156,36 @@ const ProfilePage = () => {
                 <p className="text-slate-300 mb-4">{user?.email}</p>
               )}
               {user?.bio && (
-                <p className="text-slate-200 mb-6">{user.bio}</p>
+                <p className="text-slate-200 mb-4">{user.bio}</p>
               )}
-              {!user?.bio && !isOwnProfile && (
-                <div className="mb-6"></div>
-              )}
+              
+              {/* معلومات إضافية */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6 text-right">
+                {user?.gender && (
+                  <div className="flex items-center gap-2 text-slate-300">
+                    <Users2 className="w-4 h-4 text-blue-400" />
+                    <span className="text-sm">{user.gender}</span>
+                  </div>
+                )}
+                {user?.profession && (
+                  <div className="flex items-center gap-2 text-slate-300">
+                    <Briefcase className="w-4 h-4 text-blue-400" />
+                    <span className="text-sm">{user.profession}</span>
+                  </div>
+                )}
+                {user?.country && (
+                  <div className="flex items-center gap-2 text-slate-300">
+                    <MapPin className="w-4 h-4 text-blue-400" />
+                    <span className="text-sm">{user.country}</span>
+                  </div>
+                )}
+                {user?.city && (
+                  <div className="flex items-center gap-2 text-slate-300">
+                    <MapPin className="w-4 h-4 text-blue-400" />
+                    <span className="text-sm">{user.city}</span>
+                  </div>
+                )}
+              </div>
 
               <div className="flex justify-center md:justify-start gap-8 mb-6">
                 <div className="text-center">
@@ -176,6 +201,98 @@ const ProfilePage = () => {
                   <div className="text-sm text-slate-400">يتابع</div>
                 </div>
               </div>
+
+              {isOwnProfile && (
+                <div className="mb-4">
+                  <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button
+                        data-testid="edit-profile-btn"
+                        onClick={handleEditProfile}
+                        variant="outline"
+                        className="border-blue-500 text-blue-400 hover:bg-blue-500/10"
+                      >
+                        <Edit className="w-4 h-4 mr-2" />
+                        تعديل الملف الشخصي
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="glass-effect border-slate-700 max-w-md">
+                      <DialogHeader>
+                        <DialogTitle className="text-white">تعديل الملف الشخصي</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4 mt-4">
+                        <div>
+                          <Label htmlFor="bio" className="text-slate-200">النبذة الشخصية</Label>
+                          <Textarea
+                            id="bio"
+                            value={editData.bio}
+                            onChange={(e) => setEditData({...editData, bio: e.target.value})}
+                            className="bg-slate-800/50 border-slate-600 text-white"
+                            rows={3}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="gender" className="text-slate-200">الجنس</Label>
+                          <Select
+                            value={editData.gender}
+                            onValueChange={(value) => setEditData({...editData, gender: value})}
+                          >
+                            <SelectTrigger className="bg-slate-800/50 border-slate-600 text-white">
+                              <SelectValue placeholder="اختر الجنس" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-slate-800 border-slate-700">
+                              <SelectItem value="ذكر">ذكر</SelectItem>
+                              <SelectItem value="أنثى">أنثى</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="country" className="text-slate-200">البلد</Label>
+                          <Input
+                            id="country"
+                            value={editData.country}
+                            onChange={(e) => setEditData({...editData, country: e.target.value})}
+                            className="bg-slate-800/50 border-slate-600 text-white"
+                            placeholder="مثال: السعودية"
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="city" className="text-slate-200">المدينة</Label>
+                          <Input
+                            id="city"
+                            value={editData.city}
+                            onChange={(e) => setEditData({...editData, city: e.target.value})}
+                            className="bg-slate-800/50 border-slate-600 text-white"
+                            placeholder="مثال: الرياض"
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="profession" className="text-slate-200">المهنة</Label>
+                          <Input
+                            id="profession"
+                            value={editData.profession}
+                            onChange={(e) => setEditData({...editData, profession: e.target.value})}
+                            className="bg-slate-800/50 border-slate-600 text-white"
+                            placeholder="مثال: مهندس برمجيات"
+                          />
+                        </div>
+
+                        <Button
+                          data-testid="save-profile-btn"
+                          onClick={handleSaveProfile}
+                          className="w-full btn-sapphire"
+                        >
+                          حفظ التغييرات
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              )}
 
               {!isOwnProfile && (
                 <div className="flex gap-3">
