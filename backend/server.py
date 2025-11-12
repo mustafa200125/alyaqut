@@ -112,13 +112,21 @@ class Message(BaseModel):
     receiver_id: str
     sender_username: str
     receiver_username: str
+    sender_avatar: Optional[str] = ""
+    receiver_avatar: Optional[str] = ""
     content: str
+    message_type: str = "text"  # text, image, video, audio, file
+    media_url: Optional[str] = None
+    media_size: Optional[int] = None
     read: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class MessageCreate(BaseModel):
     receiver_id: str
     content: str
+    message_type: Optional[str] = "text"
+    media_url: Optional[str] = None
+    media_size: Optional[int] = None
 
 class Story(BaseModel):
     model_config = ConfigDict(extra="ignore")
