@@ -402,26 +402,72 @@ const ProfilePage = () => {
               )}
 
               {!isOwnProfile && (
-                <div className="flex gap-3">
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <Button
+                      data-testid="follow-btn"
+                      onClick={handleFollow}
+                      className={isFollowing ? 'bg-slate-600 hover:bg-slate-700' : 'btn-sapphire'}
+                    >
+                      {isFollowing ? (
+                        <><UserMinus className="w-4 h-4 mr-2" /> إلغاء المتابعة</>
+                      ) : (
+                        <><UserPlus className="w-4 h-4 mr-2" /> متابعة</>
+                      )}
+                    </Button>
+                    
+                    <Button
+                      data-testid="friend-btn"
+                      onClick={handleFriendRequest}
+                      variant="outline"
+                      className={
+                        friendshipStatus === 'friends' 
+                          ? 'border-green-500 text-green-400 hover:bg-green-500/10'
+                          : friendshipStatus === 'pending_sent'
+                          ? 'border-yellow-500 text-yellow-400 hover:bg-yellow-500/10'
+                          : friendshipStatus === 'pending_received'
+                          ? 'border-blue-500 text-blue-400 hover:bg-blue-500/10'
+                          : 'border-blue-500 text-blue-400 hover:bg-blue-500/10'
+                      }
+                    >
+                      {friendshipStatus === 'friends' ? (
+                        <><UserCheck className="w-4 h-4 mr-2" /> صديق</>
+                      ) : friendshipStatus === 'pending_sent' ? (
+                        <><UserCheck className="w-4 h-4 mr-2" /> قيد الانتظار</>
+                      ) : friendshipStatus === 'pending_received' ? (
+                        <><UserCheck className="w-4 h-4 mr-2" /> قبول الصداقة</>
+                      ) : (
+                        <><UserPlus className="w-4 h-4 mr-2" /> إضافة صديق</>
+                      )}
+                    </Button>
+
+                    <Button
+                      data-testid="message-btn"
+                      onClick={() => navigate('/messages', { state: { selectedUser: user } })}
+                      variant="outline"
+                      className="border-blue-500 text-blue-400 hover:bg-blue-500/10"
+                    >
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      رسالة
+                    </Button>
+                  </div>
+                  
                   <Button
-                    data-testid="follow-btn"
-                    onClick={handleFollow}
-                    className={isFollowing ? 'bg-slate-600 hover:bg-slate-700' : 'btn-sapphire'}
-                  >
-                    {isFollowing ? (
-                      <><UserMinus className="w-4 h-4 mr-2" /> إلغاء المتابعة</>
-                    ) : (
-                      <><UserPlus className="w-4 h-4 mr-2" /> متابعة</>
-                    )}
-                  </Button>
-                  <Button
-                    data-testid="message-btn"
-                    onClick={() => navigate('/messages', { state: { selectedUser: user } })}
+                    data-testid="block-btn"
+                    onClick={handleBlock}
                     variant="outline"
-                    className="border-blue-500 text-blue-400 hover:bg-blue-500/10"
+                    size="sm"
+                    className={
+                      isBlocked 
+                        ? 'border-green-500 text-green-400 hover:bg-green-500/10 w-full'
+                        : 'border-red-500 text-red-400 hover:bg-red-500/10 w-full'
+                    }
                   >
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    رسالة
+                    {isBlocked ? (
+                      <><Shield className="w-4 h-4 mr-2" /> إلغاء الحظر</>
+                    ) : (
+                      <><UserX className="w-4 h-4 mr-2" /> حظر المستخدم</>
+                    )}
                   </Button>
                 </div>
               )}
