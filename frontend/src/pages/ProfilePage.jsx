@@ -29,8 +29,10 @@ const ProfilePage = () => {
     gender: '',
     country: '',
     city: '',
-    profession: ''
+    profession: '',
+    avatar_url: ''
   });
+  const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
 
   const isOwnProfile = userId === currentUser?.id;
