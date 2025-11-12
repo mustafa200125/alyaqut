@@ -14,9 +14,7 @@ const LandingPage = () => {
         
         <nav className="relative z-10 container mx-auto px-6 py-6 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
+            <img src="/logo.jpg" alt="الياقوت" className="w-10 h-10 rounded-xl object-cover" />
             <span className="text-3xl font-bold text-white" style={{fontFamily: 'Playfair Display'}}>الياقوت</span>
           </div>
           <Button 
