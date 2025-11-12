@@ -831,6 +831,18 @@ async def update_profile(profile_data: dict, current_user: dict = Depends(get_cu
     if 'avatar_url' in profile_data:
         update_fields['avatar_url'] = profile_data['avatar_url']
     
+    if 'gender' in profile_data:
+        update_fields['gender'] = profile_data['gender']
+    
+    if 'country' in profile_data:
+        update_fields['country'] = profile_data['country']
+    
+    if 'city' in profile_data:
+        update_fields['city'] = profile_data['city']
+    
+    if 'profession' in profile_data:
+        update_fields['profession'] = profile_data['profession']
+    
     if update_fields:
         await db.users.update_one(
             {"id": current_user['id']},
