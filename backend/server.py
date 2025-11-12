@@ -1006,9 +1006,27 @@ async def get_user_suggestions(current_user: dict = Depends(get_current_user)):
     following_ids = [f['following_id'] for f in following]
     following_ids.append(current_user['id'])  # Exclude self
     
+    # Get blocked users
+    blocks = await db.blocks.find({
+        "$or": [
+            {"blocker_id": current_user['id']},
+            {"blocked_id": current_user['id']}
+        ]
+    }, {"_id": 0}).to_list(1000)
+    
+    blocked_user_ids = []
+    for block in blocks:
+        if block['blocker_id'] == current_user['id']:
+            blocked_user_ids.append(block['blocked_id'])
+        else:
+            blocked_user_ids.append(block['blocker_id'])
+    
+    # Combine exclusion lists
+    exclude_ids = following_ids + blocked_user_ids
+    
     # Get random users
     users = await db.users.find(
-        {"id": {"$nin": following_ids}, "verified": True},
+        {"id": {"$nin": exclude_ids}, "verified": True},
         {"_id": 0, "password_hash": 0}
     ).limit(5).to_list(5)
     
