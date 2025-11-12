@@ -74,8 +74,9 @@ const AuthPage = () => {
 
   const handleResendCode = async () => {
     try {
-      await axios.post(`${API}/auth/resend-code`, { email: formData.email });
-      toast.success('تم إرسال كود جديد');
+      const response = await axios.post(`${API}/auth/resend-code`, { email: formData.email });
+      setServerCode(response.data.code);
+      toast.success('تم إنشاء كود جديد');
     } catch (error) {
       toast.error('فشل إرسال الكود');
     }
