@@ -114,9 +114,14 @@ const ProfilePage = () => {
               <h1 className="text-3xl font-bold text-white mb-2" style={{fontFamily: 'Playfair Display'}}>
                 {user?.username}
               </h1>
-              <p className="text-slate-300 mb-4">{user?.email}</p>
+              {isOwnProfile && (
+                <p className="text-slate-300 mb-4">{user?.email}</p>
+              )}
               {user?.bio && (
                 <p className="text-slate-200 mb-6">{user.bio}</p>
+              )}
+              {!user?.bio && !isOwnProfile && (
+                <div className="mb-6"></div>
               )}
 
               <div className="flex justify-center md:justify-start gap-8 mb-6">
