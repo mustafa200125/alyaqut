@@ -280,6 +280,15 @@ const MessagesPage = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  
+  // Cleanup polling when component unmounts or user changes
+  useEffect(() => {
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, [selectedUser]);
 
   // استقبال أوامر يوتيوب من الرسائل
   useEffect(() => {
