@@ -119,6 +119,8 @@ class Message(BaseModel):
     media_url: Optional[str] = None
     media_size: Optional[int] = None
     read: bool = False
+    is_view_once: bool = False  # For temporary images/videos
+    viewed_at: Optional[datetime] = None  # When view-once media was viewed
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class MessageCreate(BaseModel):
@@ -127,6 +129,7 @@ class MessageCreate(BaseModel):
     message_type: Optional[str] = "text"
     media_url: Optional[str] = None
     media_size: Optional[int] = None
+    is_view_once: Optional[bool] = False
 
 class Story(BaseModel):
     model_config = ConfigDict(extra="ignore")
