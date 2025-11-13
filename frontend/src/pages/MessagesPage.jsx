@@ -26,11 +26,13 @@ const MessagesPage = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [audioBlob, setAudioBlob] = useState(null);
+  const [isSending, setIsSending] = useState(false);
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingIntervalRef = useRef(null);
+  const pollingIntervalRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -39,6 +41,12 @@ const MessagesPage = () => {
     if (location.state?.selectedUser) {
       handleSelectUser(location.state.selectedUser);
     }
+    
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
   }, []);
 
   const fetchConversations = async () => {
