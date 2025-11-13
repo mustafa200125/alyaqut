@@ -603,9 +603,22 @@ const MessagesPage = () => {
                       </AvatarFallback>
                     )}
                   </Avatar>
-                  <div>
-                    <h3 className="font-bold text-white text-lg">{selectedUser.username}</h3>
-                    <p className="text-sm text-slate-400">نشط الآن</p>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-bold text-white text-lg">
+                        {conversationCustomNames[selectedUser.id] || selectedUser.username}
+                      </h3>
+                      <button
+                        onClick={handleEditConversationName}
+                        className="text-slate-400 hover:text-white transition-colors p-1"
+                        title="تعديل اسم المحادثة"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <p className="text-sm text-slate-400">
+                      {conversationCustomNames[selectedUser.id] ? `@${selectedUser.username}` : 'نشط الآن'}
+                    </p>
                   </div>
                 </div>
                 
