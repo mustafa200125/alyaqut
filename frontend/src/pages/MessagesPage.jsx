@@ -208,6 +208,8 @@ const MessagesPage = () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         setAudioBlob(audioBlob);
         
+        const sendingToast = toast.loading('جاري إرسال الرسالة الصوتية...');
+        
         // Convert to base64 and send
         const reader = new FileReader();
         reader.onloadend = async () => {
@@ -219,7 +221,12 @@ const MessagesPage = () => {
             media_url: base64Audio,
             media_size: audioBlob.size
           });
+          toast.dismiss(sendingToast);
           toast.success('تم إرسال الرسالة الصوتية');
+        };
+        reader.onerror = () => {
+          toast.dismiss(sendingToast);
+          toast.error('فشل إرسال الرسالة الصوتية');
         };
         reader.readAsDataURL(audioBlob);
         
