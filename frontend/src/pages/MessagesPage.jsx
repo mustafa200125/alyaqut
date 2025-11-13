@@ -776,10 +776,10 @@ const MessagesPage = () => {
                                     </div>
                                   </div>
                                 ) : (
-                                  // Receiver can view once
+                                  // Receiver can view once - fixed size
                                   <button
                                     onClick={() => handleViewOnceImage(message)}
-                                    className="p-6 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition-colors w-full"
+                                    className="w-80 h-60 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition-colors flex flex-col items-center justify-center"
                                   >
                                     <div className="text-4xl mb-2">🔒</div>
                                     <p className="text-sm">اضغط لعرض الصورة المؤقتة</p>
