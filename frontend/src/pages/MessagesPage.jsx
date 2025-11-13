@@ -799,12 +799,13 @@ const MessagesPage = () => {
                             </>
                           )}
                           {message.message_type === 'video' && message.media_url && (
-                            <video 
-                              src={message.media_url} 
-                              controls 
-                              className="rounded-lg max-w-full"
-                              style={{ maxHeight: '400px' }}
-                            />
+                            <div className="w-80 h-60">
+                              <video 
+                                src={message.media_url} 
+                                controls 
+                                className="rounded-lg w-full h-full object-cover"
+                              />
+                            </div>
                           )}
                           {message.message_type === 'audio' && message.media_url && (
                             <div className="p-2">
