@@ -576,7 +576,9 @@ const MessagesPage = () => {
                           )}
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                          <p className="font-bold text-white text-lg truncate">{conv.partner.username}</p>
+                          <p className="font-bold text-white text-lg truncate">
+                            {conversationCustomNames[conv.partner.id] || conv.partner.username}
+                          </p>
                           <p className="text-sm text-slate-400 truncate">
                             {conv.last_message.content}
                           </p>
