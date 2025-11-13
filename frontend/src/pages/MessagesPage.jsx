@@ -405,7 +405,7 @@ const MessagesPage = () => {
       
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: mimeType,
-        audioBitsPerSecond: 128000
+        audioBitsPerSecond: 64000  // Reduced from 128000 to 64000 for smaller file size
       });
       
       mediaRecorderRef.current = mediaRecorder;
