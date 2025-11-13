@@ -751,18 +751,33 @@ const MessagesPage = () => {
                               : 'bg-slate-700 text-white'
                           } ${message.sending ? 'animate-pulse' : ''}`}
                         >
-                          {/* Video display */}
+                          {/* Video display with download button */}
                           {message.message_type === 'video' && message.media_url && (
-                            <div className="w-80 h-60 bg-slate-800/50 rounded-lg overflow-hidden">
+                            <div className="relative w-80 h-60 bg-slate-800/50 rounded-lg overflow-hidden group">
                               {message.media_url && message.media_url.startsWith('data:video') ? (
-                                <video 
-                                  src={message.media_url} 
-                                  controls 
-                                  className="rounded-lg w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.target.style.display = 'none';
-                                  }}
-                                />
+                                <>
+                                  <video 
+                                    src={message.media_url} 
+                                    controls 
+                                    className="rounded-lg w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.target.style.display = 'none';
+                                    }}
+                                  />
+                                  {/* Download button */}
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      downloadMedia(message.media_url, `video_${message.id}.mp4`, 'video');
+                                    }}
+                                    className="absolute top-2 left-2 bg-black/70 hover:bg-black/90 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                                    title="حفظ الفيديو"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                  </button>
+                                </>
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center text-slate-400">
                                   <div className="text-center">
