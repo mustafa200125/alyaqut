@@ -78,6 +78,19 @@ const MessagesPage = () => {
       const response = await axios.get(`${API}/messages/${partner.id}`);
       setMessages(response.data);
       
+      // Load custom name for this conversation
+      try {
+        const nameResponse = await axios.get(`${API}/conversations/custom-name/${partner.id}`);
+        if (nameResponse.data.custom_name) {
+          setConversationCustomNames(prev => ({
+            ...prev,
+            [partner.id]: nameResponse.data.custom_name
+          }));
+        }
+      } catch (error) {
+        console.error('Failed to load custom name:', error);
+      }
+      
       // Start polling for new messages every 2 seconds
       pollingIntervalRef.current = setInterval(async () => {
         try {
@@ -90,6 +103,51 @@ const MessagesPage = () => {
       
     } catch (error) {
       toast.error('فشل تحميل الرسائل');
+    }
+  };
+
+  const handleEditConversationName = () => {
+    setCustomName(conversationCustomNames[selectedUser.id] || selectedUser.username);
+    setShowEditNameDialog(true);
+  };
+
+  const saveConversationName = async () => {
+    if (!customName.trim() || !selectedUser) return;
+    
+    try {
+      await axios.put(`${API}/conversations/custom-name`, {
+        partner_id: selectedUser.id,
+        custom_name: customName.trim()
+      });
+      
+      setConversationCustomNames(prev => ({
+        ...prev,
+        [selectedUser.id]: customName.trim()
+      }));
+      
+      setShowEditNameDialog(false);
+      toast.success('تم تحديث اسم المحادثة بنجاح');
+    } catch (error) {
+      toast.error('فشل تحديث اسم المحادثة');
+    }
+  };
+
+  const resetConversationName = async () => {
+    if (!selectedUser) return;
+    
+    try {
+      await axios.delete(`${API}/conversations/custom-name/${selectedUser.id}`);
+      
+      setConversationCustomNames(prev => {
+        const newNames = { ...prev };
+        delete newNames[selectedUser.id];
+        return newNames;
+      });
+      
+      setShowEditNameDialog(false);
+      toast.success('تم إعادة تعيين اسم المحادثة');
+    } catch (error) {
+      toast.error('فشل إعادة تعيين اسم المحادثة');
     }
   };
 
