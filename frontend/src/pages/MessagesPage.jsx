@@ -483,20 +483,6 @@ const MessagesPage = () => {
     }
   }, [showEmojiPicker]);
 
-  // Close attachment menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (attachmentMenuRef.current && !attachmentMenuRef.current.contains(event.target)) {
-        setShowAttachmentMenu(false);
-      }
-    };
-
-    if (showAttachmentMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [showAttachmentMenu]);
-
   const handleYouTubeControl = async (control) => {
     try {
       // إرسال أمر التحكم كرسالة خاصة
