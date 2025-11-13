@@ -920,7 +920,7 @@ const MessagesPage = () => {
                   </div>
                 )}
                 <p className="text-xs text-slate-400 text-center mt-2">
-                  الرسائل النصية والصوتية فقط
+                  الصور بجودة أصلية | الصور المؤقتة تظهر 30 ثانية فقط
                 </p>
               </div>
             </div>
