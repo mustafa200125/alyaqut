@@ -142,6 +142,19 @@ class Story(BaseModel):
     expires_at: datetime
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class ConversationName(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str  # Who set the custom name
+    partner_id: str  # The other person in the conversation
+    custom_name: str  # The custom name for this conversation
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ConversationNameUpdate(BaseModel):
+    partner_id: str
+    custom_name: str
+
 class StoryCreate(BaseModel):
     image_url: Optional[str] = None
     video_url: Optional[str] = None
