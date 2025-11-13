@@ -28,7 +28,29 @@ function App() {
     } else {
       setLoading(false);
     }
+
+    // Apply saved theme
+    const savedTheme = localStorage.getItem('app-theme') || 'blue';
+    applyTheme(savedTheme);
   }, []);
+
+  const applyTheme = (selectedTheme) => {
+    const root = document.documentElement;
+    
+    if (selectedTheme === 'red') {
+      root.style.setProperty('--theme-primary', '#DC2626');
+      root.style.setProperty('--theme-primary-light', '#EF4444');
+      root.style.setProperty('--theme-primary-dark', '#991B1B');
+      root.style.setProperty('--theme-secondary', '#7F1D1D');
+      root.style.setProperty('--theme-accent', '#FCA5A5');
+    } else {
+      root.style.setProperty('--theme-primary', '#2563EB');
+      root.style.setProperty('--theme-primary-light', '#3B82F6');
+      root.style.setProperty('--theme-primary-dark', '#1E40AF');
+      root.style.setProperty('--theme-secondary', '#1E3A8A');
+      root.style.setProperty('--theme-accent', '#93C5FD');
+    }
+  };
 
   const fetchCurrentUser = async () => {
     try {
