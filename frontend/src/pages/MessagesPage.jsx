@@ -546,10 +546,10 @@ const MessagesPage = () => {
                     <h3 className="font-bold text-white text-lg">{selectedUser.username}</h3>
                     <p className="text-sm text-slate-400">نشط الآن</p>
                   </div>
-                  </div>
-                  
-                  {/* Call Buttons */}
-                  <div className="flex gap-2">
+                </div>
+                
+                {/* Call Buttons */}
+                <div className="flex gap-2">
                     <Button
                       onClick={() => startCall(false)}
                       size="sm"
