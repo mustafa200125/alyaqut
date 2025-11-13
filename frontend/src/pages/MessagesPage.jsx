@@ -94,15 +94,38 @@ const MessagesPage = () => {
 
     if (!dataToSend.content && !dataToSend.media_url) return;
 
+    setIsSending(true);
+    
+    // Optimistic update - add message immediately to UI
+    const optimisticMessage = {
+      id: 'temp-' + Date.now(),
+      sender_id: user.id,
+      receiver_id: selectedUser.id,
+      content: dataToSend.content,
+      message_type: dataToSend.message_type || 'text',
+      media_url: dataToSend.media_url,
+      created_at: new Date().toISOString(),
+      sending: true
+    };
+    
+    setMessages(prev => [...prev, optimisticMessage]);
+    if (!messageData) setNewMessage('');
+    scrollToBottom();
+
     try {
       await axios.post(`${API}/messages`, dataToSend);
-      if (!messageData) setNewMessage('');
+      
+      // Fetch updated messages
       const response = await axios.get(`${API}/messages/${selectedUser.id}`);
       setMessages(response.data);
       fetchConversations();
       scrollToBottom();
     } catch (error) {
       toast.error('فشل إرسال الرسالة');
+      // Remove optimistic message on error
+      setMessages(prev => prev.filter(m => m.id !== optimisticMessage.id));
+    } finally {
+      setIsSending(false);
     }
   };
 
