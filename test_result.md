@@ -252,17 +252,19 @@ backend:
           comment: "GET /api/users/{user_id} endpoint works correctly. Returns complete user profile including avatar_url and all profile fields. Profile data persists correctly after updates."
 
 metadata:
-  created_by: "testing_agent"
-  version: "1.0"
-  test_sequence: 1
+  created_by: "main_agent"
+  version: "1.1"
+  test_sequence: 2
 
 test_plan:
   current_focus:
-    - "Profile Picture Upload and Save Functionality"
+    - "Real-time Message Updates with Polling"
+    - "Optimistic UI Updates for Sending Messages"
+    - "Improved Loading States and Feedback"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
 agent_communication:
-    - agent: "testing"
-      message: "Profile picture upload and save functionality testing completed successfully. All components working correctly: user registration/verification, profile navigation, image upload, crop dialog, profile editing, data persistence. Minor issue identified: JWT token uses 'user_id' key instead of standard 'sub', but this doesn't affect functionality. No critical issues found."
+    - agent: "main"
+      message: "Implemented comprehensive messaging improvements for smoother send/receive experience: 1) Auto-polling every 2s for new messages, 2) Optimistic UI updates showing messages instantly, 3) Loading states on send button, 4) Better toast notifications, 5) Smooth scrolling. Ready for testing."
