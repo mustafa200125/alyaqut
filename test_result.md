@@ -215,6 +215,18 @@ backend:
           comment: "User registration, email verification, and login flow works correctly. JWT token parsing fixed - backend uses 'user_id' key in token payload. Profile page correctly identifies own profile vs other profiles and shows appropriate buttons."
 
 backend:
+  - task: "Messages API - No changes needed"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Backend messaging endpoints working correctly. All improvements were frontend-only (polling, optimistic updates, better UX). No backend changes required."
+
   - task: "Profile Update API Endpoint"
     implemented: true
     working: true
