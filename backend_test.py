@@ -123,6 +123,10 @@ class RubyConnectAPITester:
 
     def test_user_login(self):
         """Test user login"""
+        if not hasattr(self, 'test_email') or not hasattr(self, 'test_password'):
+            self.log_test("User Login", False, "No test user credentials available")
+            return False
+            
         response = self.run_test(
             "User Login",
             "POST",
