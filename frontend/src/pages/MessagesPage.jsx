@@ -229,6 +229,44 @@ const MessagesPage = () => {
     setShowImageTypeDialog(true);
   };
 
+  const handleVideoSelect = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Check file size (max 500MB for videos)
+    const maxSize = 500 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error('الفيديو كبير جداً. الحد الأقصى 500 ميجابايت');
+      return;
+    }
+
+    const loadingToast = toast.loading('جاري إرسال الفيديو...');
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64Data = reader.result;
+        await sendMessage({
+          receiver_id: selectedUser.id,
+          content: 'فيديو',
+          message_type: 'video',
+          media_url: base64Data,
+          media_size: file.size
+        });
+        toast.dismiss(loadingToast);
+        toast.success('تم إرسال الفيديو بنجاح');
+      };
+      reader.onerror = () => {
+        toast.dismiss(loadingToast);
+        toast.error('فشل قراءة الفيديو');
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      toast.dismiss(loadingToast);
+      toast.error('فشل إرسال الفيديو');
+    }
+  };
+
   const sendImageWithType = async (isViewOnce) => {
     if (!selectedImageFile) return;
     
