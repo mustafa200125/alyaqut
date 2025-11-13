@@ -262,29 +262,24 @@ const MessagesPage = () => {
     if (!selectedImageFile) return;
     
     setShowImageTypeDialog(false);
-    const loadingToast = toast.loading('جاري إرسال الصورة...');
+    const loadingToast = toast.loading('جاري ضغط وإرسال الصورة...');
 
     try {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64Data = reader.result;
-        await sendMessage({
-          receiver_id: selectedUser.id,
-          content: isViewOnce ? '🔒 صورة مؤقتة' : 'صورة',
-          message_type: 'image',
-          media_url: base64Data,
-          media_size: selectedImageFile.size,
-          is_view_once: isViewOnce
-        });
-        toast.dismiss(loadingToast);
-        toast.success(isViewOnce ? 'تم إرسال الصورة المؤقتة بنجاح' : 'تم إرسال الصورة بنجاح');
-        setSelectedImageFile(null);
-      };
-      reader.onerror = () => {
-        toast.dismiss(loadingToast);
-        toast.error('فشل قراءة الصورة');
-      };
-      reader.readAsDataURL(selectedImageFile);
+      // Compress image before sending
+      const compressedImage = await compressImage(selectedImageFile);
+      
+      await sendMessage({
+        receiver_id: selectedUser.id,
+        content: isViewOnce ? '🔒 صورة مؤقتة' : 'صورة',
+        message_type: 'image',
+        media_url: compressedImage,
+        media_size: compressedImage.length,
+        is_view_once: isViewOnce
+      });
+      
+      toast.dismiss(loadingToast);
+      toast.success(isViewOnce ? 'تم إرسال الصورة المؤقتة بنجاح' : 'تم إرسال الصورة بنجاح');
+      setSelectedImageFile(null);
     } catch (error) {
       toast.dismiss(loadingToast);
       toast.error('فشل إرسال الصورة');
