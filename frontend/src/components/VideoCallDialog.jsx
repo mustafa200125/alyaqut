@@ -27,9 +27,33 @@ const VideoCallDialog = ({ open, onClose, isVideo, partnerName, onCallEnd }) => 
 
   const startCall = async () => {
     try {
+      // Check if media devices API is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        toast.error('متصفحك لا يدعم المكالمات. يرجى استخدام HTTPS أو متصفح حديث.');
+        onClose();
+        return;
+      }
+
+      // Check available devices
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const hasMicrophone = devices.some(device => device.kind === 'audioinput');
+      const hasCamera = devices.some(device => device.kind === 'videoinput');
+      
+      if (!hasMicrophone) {
+        toast.error('لم يتم العثور على ميكروفون. يرجى توصيل ميكروفون والمحاولة مرة أخرى.');
+        onClose();
+        return;
+      }
+      
+      if (isVideo && !hasCamera) {
+        toast.error('لم يتم العثور على كاميرا. يرجى توصيل كاميرا أو استخدام المكالمة الصوتية.');
+        onClose();
+        return;
+      }
+
       const constraints = {
         audio: true,
-        video: isVideo ? { 
+        video: isVideo && hasCamera ? { 
           width: { ideal: 1920 },
           height: { ideal: 1080 },
           frameRate: { ideal: 30 }
@@ -39,14 +63,28 @@ const VideoCallDialog = ({ open, onClose, isVideo, partnerName, onCallEnd }) => 
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       localStreamRef.current = stream;
 
-      if (localVideoRef.current) {
+      if (localVideoRef.current && isVideo) {
         localVideoRef.current.srcObject = stream;
       }
 
       toast.success(isVideo ? 'مكالمة فيديو جاهزة' : 'مكالمة صوتية جاهزة');
     } catch (error) {
       console.error('Error accessing media devices:', error);
-      toast.error('فشل الوصول للكاميرا/الميكروفون');
+      
+      // Provide specific error messages
+      if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        toast.error('لم يتم العثور على ' + (isVideo ? 'الكاميرا أو الميكروفون' : 'الميكروفون') + '. يرجى توصيل الأجهزة والمحاولة مرة أخرى.');
+      } else if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        toast.error('تم رفض إذن الوصول للأجهزة. يرجى السماح بالوصول من إعدادات المتصفح.');
+      } else if (error.name === 'NotReadableError') {
+        toast.error('الأجهزة قيد الاستخدام من تطبيق آخر.');
+      } else if (error.name === 'OverconstrainedError') {
+        toast.error('إعدادات الكاميرا المطلوبة غير مدعومة.');
+      } else {
+        toast.error('فشل الوصول للأجهزة. يرجى التحقق من الإعدادات والمحاولة مرة أخرى.');
+      }
+      
+      onClose();
     }
   };
 
