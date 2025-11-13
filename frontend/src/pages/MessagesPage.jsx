@@ -140,7 +140,7 @@ const MessagesPage = () => {
       return;
     }
 
-    toast.info('جاري تحميل الملف...');
+    const loadingToast = toast.loading('جاري تحميل الملف...');
 
     try {
       const reader = new FileReader();
@@ -153,10 +153,16 @@ const MessagesPage = () => {
           media_url: base64Data,
           media_size: file.size
         });
+        toast.dismiss(loadingToast);
         toast.success('تم إرسال الملف بنجاح');
+      };
+      reader.onerror = () => {
+        toast.dismiss(loadingToast);
+        toast.error('فشل قراءة الملف');
       };
       reader.readAsDataURL(file);
     } catch (error) {
+      toast.dismiss(loadingToast);
       toast.error('فشل تحميل الملف');
     }
   };
