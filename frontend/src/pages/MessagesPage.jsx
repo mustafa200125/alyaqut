@@ -581,12 +581,48 @@ const MessagesPage = () => {
                           } ${message.sending ? 'animate-pulse' : ''}`}
                         >
                           {message.message_type === 'image' && message.media_url && (
-                            <img 
-                              src={message.media_url} 
-                              alt="صورة" 
-                              className="rounded-lg max-w-full cursor-pointer hover:opacity-90"
-                              onClick={() => window.open(message.media_url, '_blank')}
-                            />
+                            <>
+                              {message.is_view_once ? (
+                                // View-once image - show as button if not viewed yet
+                                message.viewed_at && message.sender_id !== user.id ? (
+                                  <div className="p-4 text-center">
+                                    <div className="text-slate-400 mb-2">🔒</div>
+                                    <p className="text-sm text-slate-400">تم عرض الصورة المؤقتة</p>
+                                  </div>
+                                ) : message.sender_id === user.id ? (
+                                  // Sender sees the image normally
+                                  <div className="relative">
+                                    <img 
+                                      src={message.media_url} 
+                                      alt="صورة مؤقتة" 
+                                      className="rounded-lg max-w-full opacity-70"
+                                    />
+                                    <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs flex items-center gap-1">
+                                      <span>🔒</span>
+                                      <span>صورة مؤقتة</span>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  // Receiver can view once
+                                  <button
+                                    onClick={() => handleViewOnceImage(message)}
+                                    className="p-6 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition-colors w-full"
+                                  >
+                                    <div className="text-4xl mb-2">🔒</div>
+                                    <p className="text-sm">اضغط لعرض الصورة المؤقتة</p>
+                                    <p className="text-xs text-slate-400 mt-1">يمكن العرض مرة واحدة فقط</p>
+                                  </button>
+                                )
+                              ) : (
+                                // Normal image
+                                <img 
+                                  src={message.media_url} 
+                                  alt="صورة" 
+                                  className="rounded-lg max-w-full cursor-pointer hover:opacity-90"
+                                  onClick={() => window.open(message.media_url, '_blank')}
+                                />
+                              )}
+                            </>
                           )}
                           {message.message_type === 'video' && message.media_url && (
                             <video 
