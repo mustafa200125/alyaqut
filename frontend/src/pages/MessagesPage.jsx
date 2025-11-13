@@ -579,12 +579,12 @@ const MessagesPage = () => {
                     >
                       <Youtube className="w-4 h-4" />
                     </Button>
-                  </div>
                 </div>
+              </div>
+            </div>
 
-                <Separator className="bg-slate-700 mb-6" />
-
-                <ScrollArea className="flex-1 pr-4 mb-6">
+            {/* Messages Area */}
+            <ScrollArea className="flex-1 p-6">
                   <div className="space-y-4">
                     {messages.map((message) => (
                       <div
