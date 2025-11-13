@@ -369,15 +369,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Voice Message Recording Functionality"
-    - "Audio Call Functionality"
-    - "Video Call Functionality"
-  stuck_tasks:
-    - "Voice Message Recording Functionality"
-    - "Audio Call Functionality" 
-    - "Video Call Functionality"
+    - "Emoji Picker Feature"
+  stuck_tasks: []
   test_all: false
-  test_priority: "stuck_first"
+  test_priority: "high_first"
 
 agent_communication:
     - agent: "main"
