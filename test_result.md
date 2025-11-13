@@ -101,3 +101,95 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Test the profile picture upload and save functionality in the الياقوت social media app"
+
+frontend:
+  - task: "Profile Picture Upload and Save Functionality"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/ProfilePage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Successfully tested complete profile picture upload flow. User registration, verification, profile navigation, image upload, crop dialog, save functionality, and persistence all working correctly. Profile picture displays properly and persists after page refresh. All profile fields (bio, gender, country, city, profession) save correctly."
+
+  - task: "Image Crop Dialog Functionality"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/ImageCropDialog.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Image crop dialog appears correctly when image is uploaded. Crop functionality works, size selection (400x400 default) works, and 'حفظ وتطبيق' button saves the cropped image successfully. Preview updates correctly in the edit dialog."
+
+  - task: "Profile Edit Dialog"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/ProfilePage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Profile edit dialog opens correctly when 'تعديل الملف الشخصي' button is clicked. All form fields work: bio textarea, gender select, country input, city input, profession input. Save button works and shows success toast. Dialog closes after save."
+
+  - task: "User Authentication and Profile Access"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/AuthPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "User registration, email verification, and login flow works correctly. JWT token parsing fixed - backend uses 'user_id' key in token payload. Profile page correctly identifies own profile vs other profiles and shows appropriate buttons."
+
+backend:
+  - task: "Profile Update API Endpoint"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "PUT /api/users/profile endpoint works correctly. Accepts profile data including avatar_url (base64 image), bio, gender, country, city, profession. Data persists correctly in database and is retrievable after page refresh."
+
+  - task: "User Profile Retrieval API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "GET /api/users/{user_id} endpoint works correctly. Returns complete user profile including avatar_url and all profile fields. Profile data persists correctly after updates."
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.0"
+  test_sequence: 1
+
+test_plan:
+  current_focus:
+    - "Profile Picture Upload and Save Functionality"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+    - agent: "testing"
+      message: "Profile picture upload and save functionality testing completed successfully. All components working correctly: user registration/verification, profile navigation, image upload, crop dialog, profile editing, data persistence. Minor issue identified: JWT token uses 'user_id' key instead of standard 'sub', but this doesn't affect functionality. No critical issues found."
