@@ -736,7 +736,7 @@ const MessagesPage = () => {
                   </div>
                 )}
                 <p className="text-xs text-slate-400 text-center mt-2">
-                  الصور والفيديوهات تُرسل بالجودة الأصلية | عرض موحد في المحادثة
+                  الرسائل النصية والصوتية فقط
                 </p>
               </div>
             </div>
