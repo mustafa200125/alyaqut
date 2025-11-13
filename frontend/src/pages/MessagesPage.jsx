@@ -27,12 +27,14 @@ const MessagesPage = () => {
   const [recordingTime, setRecordingTime] = useState(0);
   const [audioBlob, setAudioBlob] = useState(null);
   const [isSending, setIsSending] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingIntervalRef = useRef(null);
   const pollingIntervalRef = useRef(null);
+  const emojiPickerRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
