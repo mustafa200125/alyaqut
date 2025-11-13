@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Make messaging send and receive smooth - تحسين سلاسة إرسال واستقبال الرسائل"
+user_problem_statement: "Test the new emoji picker feature in الياقوت messaging system"
 
 frontend:
   - task: "Voice Message Recording Functionality"
