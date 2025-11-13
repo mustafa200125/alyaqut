@@ -533,19 +533,19 @@ const MessagesPage = () => {
                   >
                     <ArrowLeft className="w-6 h-6" />
                   </Button>
-                    <Avatar>
-                      {selectedUser.avatar_url ? (
-                        <img src={selectedUser.avatar_url} alt={selectedUser.username} className="w-full h-full object-cover" />
-                      ) : (
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white">
-                          {selectedUser.username[0]?.toUpperCase()}
-                        </AvatarFallback>
-                      )}
-                    </Avatar>
-                    <div>
-                      <h3 className="font-bold text-white">{selectedUser.username}</h3>
-                      <p className="text-sm text-slate-400">نشط الآن</p>
-                    </div>
+                  <Avatar className="w-12 h-12">
+                    {selectedUser.avatar_url ? (
+                      <img src={selectedUser.avatar_url} alt={selectedUser.username} className="w-full h-full object-cover" />
+                    ) : (
+                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white">
+                        {selectedUser.username[0]?.toUpperCase()}
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
+                  <div>
+                    <h3 className="font-bold text-white text-lg">{selectedUser.username}</h3>
+                    <p className="text-sm text-slate-400">نشط الآن</p>
+                  </div>
                   </div>
                   
                   {/* Call Buttons */}
