@@ -657,63 +657,6 @@ const MessagesPage = () => {
                   ) : (
                     /* Normal Input Interface */
                     <div className="flex gap-2">
-                      {/* Hidden file inputs */}
-                      <input
-                        type="file"
-                        ref={fileInputRef}
-                        className="hidden"
-                        accept="image/*"
-                        onChange={(e) => handleFileSelect(e, 'image')}
-                      />
-                      <input
-                        type="file"
-                        ref={videoInputRef}
-                        className="hidden"
-                        accept="video/*"
-                        onChange={(e) => handleFileSelect(e, 'video')}
-                      />
-                      
-                      {/* Attachment Menu */}
-                      <div className="relative" ref={attachmentMenuRef}>
-                        <Button
-                          onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
-                          size="sm"
-                          variant="outline"
-                          className="border-slate-600 text-slate-300 hover:bg-slate-700"
-                          title="المرفقات"
-                        >
-                          <MoreVertical className="w-4 h-4" />
-                        </Button>
-
-                        {/* Attachment Dropdown Menu */}
-                        {showAttachmentMenu && (
-                          <div className="absolute bottom-full left-0 mb-2 glass-effect rounded-lg border border-slate-700 shadow-xl z-50 min-w-[200px]">
-                            <div className="p-2 space-y-1">
-                              <button
-                                onClick={() => {
-                                  fileInputRef.current.click();
-                                  setShowAttachmentMenu(false);
-                                }}
-                                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors text-right"
-                              >
-                                <Image className="w-5 h-5 text-blue-400" />
-                                <span className="text-white font-medium">إرسال صورة</span>
-                              </button>
-                              <button
-                                onClick={() => {
-                                  videoInputRef.current.click();
-                                  setShowAttachmentMenu(false);
-                                }}
-                                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors text-right"
-                              >
-                                <Film className="w-5 h-5 text-purple-400" />
-                                <span className="text-white font-medium">إرسال فيديو</span>
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
                       <Button
                         onClick={startRecording}
                         size="sm"
