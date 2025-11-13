@@ -842,6 +842,110 @@ const MessagesPage = () => {
         currentUserId={user?.id}
         onSendControl={handleYouTubeControl}
       />
+
+      {/* Image Type Selection Dialog */}
+      {showImageTypeDialog && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+          <Card className="glass-effect border-slate-700 p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold text-white mb-4 text-center">اختر نوع الصورة</h2>
+            <p className="text-slate-300 text-sm mb-6 text-center">
+              كيف تريد إرسال هذه الصورة؟
+            </p>
+            <div className="space-y-3">
+              <Button
+                onClick={() => sendImageWithType(false)}
+                className="w-full btn-sapphire flex items-center justify-center gap-2"
+              >
+                <Image className="w-5 h-5" />
+                <span>صورة عادية</span>
+              </Button>
+              <Button
+                onClick={() => sendImageWithType(true)}
+                className="w-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center gap-2"
+              >
+                <span>🔒</span>
+                <span>صورة مؤقتة (عرض مرة واحدة)</span>
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowImageTypeDialog(false);
+                  setSelectedImageFile(null);
+                }}
+                variant="outline"
+                className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
+              >
+                إلغاء
+              </Button>
+            </div>
+            <p className="text-xs text-slate-400 mt-4 text-center">
+              💡 الصور المؤقتة تُعرض مرة واحدة فقط ولا يمكن حفظها أو مشاركتها
+            </p>
+          </Card>
+        </div>
+      )}
+
+      {/* View-Once Image Viewer */}
+      {viewOnceImage && (
+        <div 
+          className="fixed inset-0 bg-black flex items-center justify-center z-50"
+          style={{ 
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none'
+          }}
+          onContextMenu={(e) => e.preventDefault()}
+        >
+          {/* Overlay to prevent screenshots */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 pointer-events-none" />
+          
+          <div className="relative max-w-4xl max-h-screen p-4">
+            {/* Close button */}
+            <button
+              onClick={closeViewOnceImage}
+              className="absolute top-8 right-8 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full z-10"
+            >
+              ✕
+            </button>
+
+            {/* Warning text */}
+            <div className="absolute top-8 left-8 bg-red-600/90 text-white px-4 py-2 rounded-lg text-sm z-10">
+              🔒 صورة مؤقتة - عرض مرة واحدة فقط
+            </div>
+
+            {/* Image */}
+            <img
+              src={viewOnceImage.media_url}
+              alt="صورة مؤقتة"
+              className="max-w-full max-h-screen object-contain rounded-lg"
+              style={{
+                pointerEvents: 'none',
+                userSelect: 'none',
+                WebkitUserSelect: 'none',
+                MozUserSelect: 'none',
+                msUserSelect: 'none',
+                WebkitTouchCallout: 'none'
+              }}
+              onContextMenu={(e) => e.preventDefault()}
+              draggable={false}
+            />
+
+            {/* Watermark overlay */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="text-white/20 text-6xl font-bold rotate-45">
+                  {user?.username}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Info at bottom */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-6 py-3 rounded-full text-sm">
+            اضغط ✕ للإغلاق - لا يمكن حفظ أو مشاركة هذه الصورة
+          </div>
+        </div>
+      )}
     </div>
   );
 };
