@@ -60,9 +60,26 @@ const MessagesPage = () => {
 
   const handleSelectUser = async (partner) => {
     setSelectedUser(partner);
+    
+    // Clear previous polling interval
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+    }
+    
     try {
       const response = await axios.get(`${API}/messages/${partner.id}`);
       setMessages(response.data);
+      
+      // Start polling for new messages every 2 seconds
+      pollingIntervalRef.current = setInterval(async () => {
+        try {
+          const response = await axios.get(`${API}/messages/${partner.id}`);
+          setMessages(response.data);
+        } catch (error) {
+          console.error('Polling error:', error);
+        }
+      }, 2000);
+      
     } catch (error) {
       toast.error('فشل تحميل الرسائل');
     }
