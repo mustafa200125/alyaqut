@@ -708,12 +708,24 @@ const MessagesPage = () => {
                                   </div>
                                 ) : message.sender_id === user.id ? (
                                   // Sender sees the image normally
-                                  <div className="relative w-80 h-60">
-                                    <img 
-                                      src={message.media_url} 
-                                      alt="صورة مؤقتة" 
-                                      className="rounded-lg w-full h-full object-cover opacity-70"
-                                    />
+                                  <div className="relative w-80 h-60 bg-slate-800/50 rounded-lg overflow-hidden">
+                                    {message.media_url && message.media_url.startsWith('data:image') ? (
+                                      <img 
+                                        src={message.media_url} 
+                                        alt="صورة مؤقتة" 
+                                        className="rounded-lg w-full h-full object-cover opacity-70"
+                                        onError={(e) => {
+                                          e.target.style.display = 'none';
+                                        }}
+                                      />
+                                    ) : (
+                                      <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                        <div className="text-center">
+                                          <p className="text-2xl mb-2">⚠️</p>
+                                          <p className="text-sm">خطأ في عرض الصورة</p>
+                                        </div>
+                                      </div>
+                                    )}
                                     <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs flex items-center gap-1">
                                       <span>🔒</span>
                                       <span>صورة مؤقتة</span>
