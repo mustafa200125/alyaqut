@@ -1,0 +1,75 @@
+<analysis>
+The trajectory details the creation of a full-stack social media application named الياقوت (The Ruby) from scratch. The user, communicating in Arabic, provided an iterative set of feature requests, which the AI engineer implemented.
+
+My analysis began by chronologically processing the conversation. The initial request was broad: Build a social media app. The AI engineer clarified requirements, establishing core features like email/password authentication, a ruby-colored theme, user profiles, posts, messaging, and AI-powered content suggestions.
+
+Development proceeded feature by feature. The backend (FastAPI) was typically built first, defining Pydantic models and API endpoints in . The frontend (React) was then created or modified, with new pages (, , , etc.) and components being written. A key architectural decision was made early on for authentication: instead of integrating an email service, the verification code is returned in the API response and displayed directly in the UI for the user to copy, as a quick solution.
+
+Throughout the process, the user requested increasingly complex features: advanced profile details (gender, country, profession), user-uploaded profile pictures (handled with base64 encoding and a cropping tool), a friend/follow/block system, and a highly advanced messaging system with voice/video calls, high-quality media sharing, and voice notes. The final major feature was a shared YouTube player within chats. This feature went through an iteration where an initial plan to use the official YouTube API was scrapped at the user's request for a free, no-API-key solution, leading to a simplified URL-pasting implementation. The user was unsatisfied and re-requested the feature with search, which is the current task.
+</analysis>
+
+<product_requirements>
+The project is to build a full-stack social media application called الياقوت (The Ruby), featuring a modern, ruby-colored aesthetic.
+
+**Core Features Implemented:**
+-   **User Authentication:** Secure registration and login via email and password. Verification is handled by displaying a code in the UI, bypassing the need for email integration.
+-   **User Profiles:** Customizable profiles where users can set a profile picture (with cropping), bio, gender, country, city, and profession. Email is visible only to the profile owner.
+-   **Social Graph:** Users can follow/unfollow, send/accept/cancel friend requests, and block/unblock other users. Blocked users' content is hidden throughout the app.
+-   **Content & Feeds:** Users can create and view posts. The main feed displays posts from followed users. An AI-powered feature suggests post ideas.
+-   **Advanced Messaging:** Real-time one-on-one chat with features including:
+    -   Voice and video calls (WebRTC).
+    -   High-quality image (up to 50MB) and video (up to 500MB) sharing.
+    -   Voice messages (Bismat) with a dedicated recording UI and audio player.
+    -   A shared YouTube player where users can co-watch videos by pasting a URL.
+-   **Branding:** The application uses a custom user-provided image as its logo and favicon.
+</product_requirements>
+
+<key_technical_concepts>
+- **Backend:** FastAPI, Pydantic for data modeling, and JWT for token-based authentication.
+- **Frontend:** React,  for API calls, and  for navigation.
+- **Database:** MongoDB for data persistence.
+- **Styling:** Tailwind CSS and custom CSS for a glass-morphism and ruby-themed design.
+- **Image Handling:** Base64 encoding for storing images, with  for client-side image cropping.
+- **Real-time Communication:** WebSockets () for messaging and shared controls; WebRTC for voice/video calls.
+</key_technical_concepts>
+
+<code_architecture>
+The application follows a standard monorepo structure with separate directories for the backend and frontend.
+
+
+
+-   ****
+    -   **Importance:** This is the monolithic backend file containing the entire FastAPI application logic. It defines all Pydantic models for users, posts, messages, etc., and all API endpoints for authentication, CRUD operations, social interactions (follow, friend, block), messaging, and AI suggestions.
+    -   **Changes:** The file grew substantially from a basic template to a full-featured backend, with new models and endpoints added for every feature request, including complex logic for filtering content from blocked users.
+
+-   ****
+    -   **Importance:** This page displays user profiles and is the hub for social actions. It handles both viewing one's own profile and others'.
+    -   **Changes:** This file underwent massive changes. It was updated to: display new profile fields (bio, gender, location); hide the email address if the viewer is not the owner; implement state and buttons for follow, friend request, and block actions; and integrate the profile picture upload and cropping functionality via the  component.
+
+-   ****
+    -   **Importance:** This is the core communication interface, handling user selection, message display, and real-time interaction.
+    -   **Changes:** This page evolved from a simple text chat to a comprehensive communication suite. It was heavily modified to integrate: WebSockets for real-time messaging; handlers for sending/receiving images, videos, and voice notes; and buttons/dialogs for initiating voice/video calls () and the shared YouTube session ().
+
+-   ****
+    -   **Importance:** This component provides the shared YouTube viewing experience.
+    -   **Changes:** Created to facilitate co-watching. It was initially designed to use a search API but was refactored to a simpler model where a user pastes a YouTube URL directly, which then syncs the video playback between chat participants.
+</code_architecture>
+
+<pending_tasks>
+- **Implement Real Email Service:** The current authentication system displays the verification code in the UI. A pending task is to integrate a real email service like SendGrid, as proposed by the AI engineer, to send verification codes to the user's email address for a more traditional and secure workflow.
+</pending_tasks>
+
+<current_work>
+The most recent task involved implementing a shared YouTube player in the chat. The user's request was to allow two users in a conversation to search for and watch YouTube videos together, with shared playback controls.
+
+1.  **Initial Plan:** The AI engineer planned to use the official YouTube Data API for search, which would require the user to provide an API key.
+2.  **User Feedback:** The user explicitly requested a free solution that did not require any API keys or complex steps ().
+3.  **First Implementation:** The AI engineer pivoted and created a simplified version. A new component, , was built. Instead of search, it presented an input field where a user could paste a full YouTube URL. The video ID was extracted, and playback was synchronized between the two users using WebSocket events for play, pause, and seek.
+4.  **Second User Feedback:** After seeing a demonstration of the URL-pasting implementation, the user reiterated their original request for a shared music/song feature with search capabilities ().
+
+The development process is currently paused at this point, with the AI engineer acknowledging the user's reiterated request and starting to formulate a new plan to deliver search functionality without an official API key.
+</current_work>
+
+<optional_next_step>
+I will now re-implement the shared media feature to include a search functionality for songs and videos, using a free method that does not require a YouTube API key, to meet the user's specific request.
+</optional_next_step>
