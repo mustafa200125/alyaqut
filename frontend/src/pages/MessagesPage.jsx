@@ -601,15 +601,25 @@ const MessagesPage = () => {
             {/* Chat Header */}
             <div className="p-6 border-b border-slate-700">
               <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <Button
-                    variant="ghost"
-                    onClick={() => setSelectedUser(null)}
-                    className="text-slate-200 hover:text-white p-2"
-                    title="العودة للمحادثات"
-                  >
-                    <ArrowLeft className="w-6 h-6" />
-                  </Button>
+                {/* Right Side - User Info */}
+                <div className="flex items-center gap-3 flex-1 justify-end order-2">
+                  <div className="text-right">
+                    <div className="flex items-center gap-2 justify-end">
+                      <button
+                        onClick={handleEditConversationName}
+                        className="text-slate-400 hover:text-white transition-colors p-1"
+                        title="تعديل اسم المحادثة"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <h3 className="font-bold text-white text-lg">
+                        {conversationCustomNames[selectedUser.id] || selectedUser.username}
+                      </h3>
+                    </div>
+                    <p className="text-sm text-slate-400">
+                      {conversationCustomNames[selectedUser.id] ? `@${selectedUser.username}` : 'نشط الآن'}
+                    </p>
+                  </div>
                   <Avatar className="w-12 h-12">
                     {selectedUser.avatar_url ? (
                       <img src={selectedUser.avatar_url} alt={selectedUser.username} className="w-full h-full object-cover" />
@@ -619,23 +629,18 @@ const MessagesPage = () => {
                       </AvatarFallback>
                     )}
                   </Avatar>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-white text-lg">
-                        {conversationCustomNames[selectedUser.id] || selectedUser.username}
-                      </h3>
-                      <button
-                        onClick={handleEditConversationName}
-                        className="text-slate-400 hover:text-white transition-colors p-1"
-                        title="تعديل اسم المحادثة"
-                      >
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                    </div>
-                    <p className="text-sm text-slate-400">
-                      {conversationCustomNames[selectedUser.id] ? `@${selectedUser.username}` : 'نشط الآن'}
-                    </p>
-                  </div>
+                </div>
+                
+                {/* Left Side - Back Button */}
+                <div className="order-1">
+                  <Button
+                    variant="ghost"
+                    onClick={() => setSelectedUser(null)}
+                    className="text-slate-200 hover:text-white p-2"
+                    title="العودة للمحادثات"
+                  >
+                    <ArrowLeft className="w-6 h-6" />
+                  </Button>
                 </div>
                 
                 {/* Call Buttons */}
