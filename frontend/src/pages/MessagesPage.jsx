@@ -737,18 +737,35 @@ const MessagesPage = () => {
                               ) : (
                                 // Normal image
                                 <div 
-                                  className="w-80 h-60 cursor-pointer" 
+                                  className="w-80 h-60 cursor-pointer bg-slate-800/50 rounded-lg overflow-hidden" 
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    window.open(message.media_url, '_blank');
+                                    if (message.media_url && message.media_url.startsWith('data:image')) {
+                                      window.open(message.media_url, '_blank');
+                                    } else {
+                                      toast.error('خطأ في تحميل الصورة');
+                                    }
                                   }}
                                   style={{ pointerEvents: 'auto' }}
                                 >
-                                  <img 
-                                    src={message.media_url} 
-                                    alt="صورة" 
-                                    className="rounded-lg w-full h-full object-cover hover:opacity-90 transition-opacity"
-                                  />
+                                  {message.media_url && message.media_url.startsWith('data:image') ? (
+                                    <img 
+                                      src={message.media_url} 
+                                      alt="صورة" 
+                                      className="rounded-lg w-full h-full object-cover hover:opacity-90 transition-opacity"
+                                      onError={(e) => {
+                                        e.target.src = '';
+                                        e.target.alt = 'فشل تحميل الصورة';
+                                      }}
+                                    />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                      <div className="text-center">
+                                        <p className="text-2xl mb-2">⚠️</p>
+                                        <p className="text-sm">خطأ في عرض الصورة</p>
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                               )}
                             </>
