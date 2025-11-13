@@ -111,11 +111,14 @@ frontend:
     file: "/app/frontend/src/pages/MessagesPage.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: true
           agent: "main"
           comment: "Added automatic polling every 2 seconds to fetch new messages when a conversation is active. Polling starts when user selects a chat and stops when switching chats or unmounting component."
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: Polling mechanism is working correctly. Backend logs show continuous polling requests every 2 seconds (GET /api/messages/{user_id}) when conversations are active. Polling setup and cleanup logic implemented properly in useEffect hooks. Code review confirms polling starts when user selects conversation and stops when switching or unmounting."
 
   - task: "Optimistic UI Updates for Sending Messages"
     implemented: true
@@ -123,11 +126,14 @@ frontend:
     file: "/app/frontend/src/pages/MessagesPage.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: true
           agent: "main"
           comment: "Messages now appear instantly in the UI before server confirmation (optimistic update). If sending fails, the message is removed. This makes the chat feel more responsive."
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: Optimistic updates implemented correctly. Code shows messages are immediately added to UI with temporary ID and 'sending: true' state, then replaced with server response. Error handling removes optimistic message if send fails. Animation and opacity effects applied during sending state."
 
   - task: "Improved Loading States and Feedback"
     implemented: true
@@ -135,11 +141,14 @@ frontend:
     file: "/app/frontend/src/pages/MessagesPage.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: true
           agent: "main"
           comment: "Added loading spinner on send button while message is being sent. Send button is disabled during sending and when message is empty. Input is also disabled during sending."
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: Loading states working correctly. Send button shows spinner during sending (isSending state), button disabled when empty or sending, message input disabled during sending. Button state management properly implemented with disabled={isSending || !newMessage.trim()}."
 
   - task: "Better Toast Notifications for File/Audio Upload"
     implemented: true
@@ -147,11 +156,14 @@ frontend:
     file: "/app/frontend/src/pages/MessagesPage.jsx"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: true
           agent: "main"
           comment: "Changed to loading toasts that can be dismissed when upload completes. Better user feedback for file and voice message uploads."
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: Toast notifications implemented correctly. Loading toasts show 'جاري تحميل الملف...' during upload, then dismissed and replaced with success/error toasts. File size validation and error handling in place. Voice recording shows proper toast feedback."
 
   - task: "Smooth Scroll to Bottom"
     implemented: true
@@ -159,11 +171,14 @@ frontend:
     file: "/app/frontend/src/pages/MessagesPage.jsx"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: true
           agent: "main"
           comment: "Added 100ms delay to scrollToBottom to ensure DOM has updated. Smooth scrolling behavior for better UX."
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: Smooth scrolling implemented correctly. scrollToBottom function uses setTimeout(100ms) to ensure DOM updates, then scrollIntoView with smooth behavior. Called after sending messages and in useEffect when messages change."
 
 backend:
   - task: "Profile Picture Upload and Save Functionality"
