@@ -301,54 +301,6 @@ const MessagesPage = () => {
     setViewOnceImage(null);
   };
 
-  // Compress image before sending
-  const compressImage = async (file, maxWidth = 1920, maxHeight = 1080, quality = 0.7) => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          // Calculate new dimensions
-          let width = img.width;
-          let height = img.height;
-          
-          if (width > maxWidth) {
-            height = (height * maxWidth) / width;
-            width = maxWidth;
-          }
-          
-          if (height > maxHeight) {
-            width = (width * maxHeight) / height;
-            height = maxHeight;
-          }
-          
-          // Create canvas and compress
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          // Convert to base64 with compression
-          canvas.toBlob(
-            (blob) => {
-              const compressedReader = new FileReader();
-              compressedReader.onloadend = () => {
-                resolve(compressedReader.result);
-              };
-              compressedReader.readAsDataURL(blob);
-            },
-            'image/jpeg',
-            quality
-          );
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
   const startCall = (isVideo) => {
     setCallType(isVideo ? 'video' : 'audio');
     setShowCallDialog(true);
