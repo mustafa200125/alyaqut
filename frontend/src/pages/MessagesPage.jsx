@@ -28,6 +28,9 @@ const MessagesPage = () => {
   const [audioBlob, setAudioBlob] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showImageTypeDialog, setShowImageTypeDialog] = useState(false);
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+  const [viewOnceImage, setViewOnceImage] = useState(null);
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
