@@ -447,18 +447,41 @@ class RubyConnectAPITester:
 
     def run_all_tests(self):
         """Run all API tests"""
-        print("🚀 Starting Ruby Connect API Tests...")
+        print("🚀 Starting الياقوت App Backend API Tests...")
         print("=" * 50)
         
-        # Authentication flow
-        if not self.test_user_registration():
-            print("❌ Registration failed, stopping tests")
-            return False
-            
-        if not self.test_email_verification():
-            print("❌ Email verification failed, stopping tests")
-            return False
-            
+        # SPECIFIC TESTS FROM REVIEW REQUEST
+        print("\n📋 Running Review Request Specific Tests...")
+        
+        # Test 1: Authentication Flow (as specified in review)
+        auth_success = self.test_specific_auth_flow()
+        
+        # Test 2: Check if users exist
+        self.check_users_in_database()
+        
+        # Test 3: Try existing user login
+        self.test_existing_user_login()
+        
+        # Test 4: Voice Message API (if we have token)
+        if hasattr(self, 'voice_test_token'):
+            # Temporarily use voice test token for voice message test
+            original_token = self.token
+            self.token = self.voice_test_token
+            self.test_voice_message_api()
+            self.token = original_token
+        
+        print("\n📋 Running Standard API Tests...")
+        
+        # Standard authentication flow (if specific auth failed)
+        if not auth_success:
+            if not self.test_user_registration():
+                print("❌ Registration failed, stopping standard tests")
+                return False
+                
+            if not self.test_email_verification():
+                print("❌ Email verification failed, stopping standard tests")
+                return False
+        
         # Test authenticated endpoints
         self.test_get_current_user()
         
@@ -482,7 +505,7 @@ class RubyConnectAPITester:
         self.test_get_conversations()
         self.test_stories()
         
-        # Test login with existing user
+        # Test login with existing user (standard)
         self.test_user_login()
         
         print("=" * 50)
