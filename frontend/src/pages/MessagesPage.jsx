@@ -277,7 +277,19 @@ const MessagesPage = () => {
       toast.success('بدأ التسجيل...');
     } catch (error) {
       console.error('Error accessing microphone:', error);
-      toast.error('فشل الوصول للميكروفون');
+      
+      // Provide specific error messages
+      if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        toast.error('لم يتم العثور على ميكروفون. يرجى توصيل ميكروفون والمحاولة مرة أخرى.');
+      } else if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        toast.error('تم رفض إذن الوصول للميكروفون. يرجى السماح بالوصول من إعدادات المتصفح.');
+      } else if (error.name === 'NotReadableError') {
+        toast.error('الميكروفون قيد الاستخدام من تطبيق آخر.');
+      } else if (error.name === 'OverconstrainedError') {
+        toast.error('إعدادات الميكروفون المطلوبة غير مدعومة.');
+      } else {
+        toast.error('فشل الوصول للميكروفون. يرجى التحقق من الإعدادات والمحاولة مرة أخرى.');
+      }
     }
   };
 
