@@ -351,12 +351,10 @@ test_plan:
     - "Voice Message Recording Functionality"
     - "Audio Call Functionality"
     - "Video Call Functionality"
-    - "Authentication System for Voice Testing"
   stuck_tasks:
     - "Voice Message Recording Functionality"
     - "Audio Call Functionality" 
     - "Video Call Functionality"
-    - "Authentication System for Voice Testing"
   test_all: false
   test_priority: "stuck_first"
 
