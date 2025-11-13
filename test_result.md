@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the profile picture upload and save functionality in the الياقوت social media app"
+user_problem_statement: "Make messaging send and receive smooth - تحسين سلاسة إرسال واستقبال الرسائل"
 
 frontend:
   - task: "Profile Picture Upload and Save Functionality"
