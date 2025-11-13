@@ -74,6 +74,7 @@ function App() {
             <Route path="/profile/:userId" element={user ? <ProfilePage /> : <Navigate to="/" />} />
             <Route path="/messages" element={user ? <MessagesPage /> : <Navigate to="/" />} />
             <Route path="/explore" element={user ? <ExplorePage /> : <Navigate to="/" />} />
+            <Route path="/settings" element={user ? <SettingsPage /> : <Navigate to="/" />} />
           </Routes>
         </BrowserRouter>
         <Toaster position="top-center" richColors />
