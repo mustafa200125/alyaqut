@@ -424,14 +424,14 @@ const MessagesPage = () => {
                     {messages.map((message) => (
                       <div
                         key={message.id}
-                        className={`flex ${message.sender_id === user.id ? 'justify-start' : 'justify-end'}`}
+                        className={`flex ${message.sender_id === user.id ? 'justify-start' : 'justify-end'} ${message.sending ? 'opacity-70' : ''}`}
                       >
                         <div
                           className={`max-w-[70%] rounded-lg ${
                             message.sender_id === user.id
                               ? 'bg-blue-600 text-white'
                               : 'bg-slate-700 text-white'
-                          }`}
+                          } ${message.sending ? 'animate-pulse' : ''}`}
                         >
                           {message.message_type === 'image' && message.media_url && (
                             <img 
