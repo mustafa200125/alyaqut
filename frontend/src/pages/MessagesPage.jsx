@@ -551,17 +551,23 @@ const MessagesPage = () => {
                         data-testid="message-input"
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                      placeholder="اكتب رسالة..."
-                      className="flex-1 bg-slate-800/50 border-slate-600 text-white"
-                    />
-                    <Button 
-                      data-testid="send-message-btn"
-                      onClick={() => sendMessage()}
-                      className="btn-sapphire"
-                    >
-                      <Send className="w-5 h-5" />
-                    </Button>
+                        onKeyPress={(e) => e.key === 'Enter' && !isSending && sendMessage()}
+                        placeholder="اكتب رسالة..."
+                        className="flex-1 bg-slate-800/50 border-slate-600 text-white"
+                        disabled={isSending}
+                      />
+                      <Button 
+                        data-testid="send-message-btn"
+                        onClick={() => sendMessage()}
+                        className="btn-sapphire"
+                        disabled={isSending || !newMessage.trim()}
+                      >
+                        {isSending ? (
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <Send className="w-5 h-5" />
+                        )}
+                      </Button>
                   </div>
                   )}
                   <p className="text-xs text-slate-400 text-center">
