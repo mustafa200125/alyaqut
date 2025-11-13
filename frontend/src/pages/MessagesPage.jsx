@@ -671,11 +671,13 @@ const MessagesPage = () => {
                       </div>
                     ))}
                   </div>
-                  <div ref={messagesEndRef} />
-                </ScrollArea>
+                <div ref={messagesEndRef} />
+              </div>
+            </ScrollArea>
 
-                {/* Message Input with Media Buttons */}
-                <div className="space-y-3">
+            {/* Message Input Area */}
+            <div className="border-t border-slate-700 p-6">
+              <div className="space-y-3">
                   {isRecording ? (
                     /* Recording Interface */
                     <div className="glass-effect rounded-lg p-4 border border-red-500">
