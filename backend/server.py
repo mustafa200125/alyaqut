@@ -920,6 +920,73 @@ async def mark_message_viewed(message_id: str, current_user: dict = Depends(get_
     
     return {"message": "Marked as viewed"}
 
+@api_router.put("/conversations/custom-name")
+async def set_conversation_custom_name(
+    data: ConversationNameUpdate,
+    current_user: dict = Depends(get_current_user)
+):
+    """Set a custom name for a conversation"""
+    # Check if custom name already exists
+    existing = await db.conversation_names.find_one({
+        "user_id": current_user['id'],
+        "partner_id": data.partner_id
+    })
+    
+    if existing:
+        # Update existing
+        await db.conversation_names.update_one(
+            {"id": existing['id']},
+            {"$set": {
+                "custom_name": data.custom_name,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+    else:
+        # Create new
+        conv_name = ConversationName(
+            user_id=current_user['id'],
+            partner_id=data.partner_id,
+            custom_name=data.custom_name
+        )
+        conv_name_dict = conv_name.dict()
+        conv_name_dict['created_at'] = conv_name_dict['created_at'].isoformat()
+        conv_name_dict['updated_at'] = conv_name_dict['updated_at'].isoformat()
+        await db.conversation_names.insert_one(conv_name_dict)
+    
+    return {"message": "Custom name set successfully", "custom_name": data.custom_name}
+
+@api_router.get("/conversations/custom-name/{partner_id}")
+async def get_conversation_custom_name(
+    partner_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get custom name for a conversation"""
+    conv_name = await db.conversation_names.find_one({
+        "user_id": current_user['id'],
+        "partner_id": partner_id
+    })
+    
+    if conv_name:
+        return {"custom_name": conv_name['custom_name']}
+    
+    return {"custom_name": None}
+
+@api_router.delete("/conversations/custom-name/{partner_id}")
+async def delete_conversation_custom_name(
+    partner_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Delete custom name for a conversation (reset to default)"""
+    result = await db.conversation_names.delete_one({
+        "user_id": current_user['id'],
+        "partner_id": partner_id
+    })
+    
+    if result.deleted_count > 0:
+        return {"message": "Custom name deleted successfully"}
+    
+    return {"message": "No custom name found"}
+
 
 # =============== Stories Routes ===============
 
