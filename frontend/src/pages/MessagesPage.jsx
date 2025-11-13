@@ -323,6 +323,36 @@ const MessagesPage = () => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const emojis = [
+    '😊', '😂', '❤️', '🥰', '😍', '🤗', '👍', '👏',
+    '🙏', '💪', '✨', '🎉', '🔥', '💯', '🌟', '⭐',
+    '😎', '🤔', '😢', '😭', '😡', '😴', '🥱', '😇',
+    '🤩', '🥳', '😋', '🤤', '😷', '🤒', '🤕', '🤢',
+    '👋', '🤝', '💐', '🌹', '🌺', '🌻', '🌷', '🌸',
+    '☕', '🍕', '🍔', '🍟', '🎂', '🍰', '🍫', '🍪',
+    '🚀', '✈️', '🚗', '🏠', '💼', '📱', '💻', '⌚',
+    '🎵', '🎶', '🎤', '🎧', '📷', '🎨', '⚽', '🏀'
+  ];
+
+  const insertEmoji = (emoji) => {
+    setNewMessage(prev => prev + emoji);
+    setShowEmojiPicker(false);
+  };
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    if (showEmojiPicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showEmojiPicker]);
+
   const handleYouTubeControl = async (control) => {
     try {
       // إرسال أمر التحكم كرسالة خاصة
