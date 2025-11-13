@@ -646,15 +646,59 @@ const MessagesPage = () => {
                         <Mic className="w-4 h-4" />
                       </Button>
 
-                      <Input
-                        data-testid="message-input"
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && !isSending && sendMessage()}
-                        placeholder="اكتب رسالة..."
-                        className="flex-1 bg-slate-800/50 border-slate-600 text-white"
-                        disabled={isSending}
-                      />
+                      <div className="relative flex-1">
+                        <Input
+                          data-testid="message-input"
+                          value={newMessage}
+                          onChange={(e) => setNewMessage(e.target.value)}
+                          onKeyPress={(e) => e.key === 'Enter' && !isSending && sendMessage()}
+                          placeholder="اكتب رسالة..."
+                          className="w-full bg-slate-800/50 border-slate-600 text-white pr-10"
+                          disabled={isSending}
+                        />
+                        
+                        {/* Emoji Button */}
+                        <Button
+                          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                          size="sm"
+                          variant="ghost"
+                          className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-700"
+                          title="إضافة إيموجي"
+                        >
+                          <Smile className="w-4 h-4 text-slate-400" />
+                        </Button>
+
+                        {/* Emoji Picker Popup */}
+                        {showEmojiPicker && (
+                          <div
+                            ref={emojiPickerRef}
+                            className="absolute bottom-full left-0 mb-2 glass-effect rounded-lg p-4 border border-slate-700 shadow-2xl z-50"
+                            style={{ width: '320px', maxHeight: '300px' }}
+                          >
+                            <div className="flex items-center justify-between mb-3">
+                              <h3 className="text-white font-semibold text-sm">اختر إيموجي</h3>
+                              <button
+                                onClick={() => setShowEmojiPicker(false)}
+                                className="text-slate-400 hover:text-white"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                            <div className="grid grid-cols-8 gap-2 overflow-y-auto" style={{ maxHeight: '240px' }}>
+                              {emojis.map((emoji, index) => (
+                                <button
+                                  key={index}
+                                  onClick={() => insertEmoji(emoji)}
+                                  className="text-2xl hover:bg-slate-700 rounded p-1 transition-colors"
+                                  title={emoji}
+                                >
+                                  {emoji}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                       <Button 
                         data-testid="send-message-btn"
                         onClick={() => sendMessage()}
