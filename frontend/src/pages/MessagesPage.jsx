@@ -213,7 +213,84 @@ const MessagesPage = () => {
     }
   };
 
-  // Removed image and video sending functionality
+  const handleImageSelect = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Check file size (max 50MB)
+    const maxSize = 50 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error('الصورة كبيرة جداً. الحد الأقصى 50 ميجابايت');
+      return;
+    }
+
+    setSelectedImageFile(file);
+    setShowImageTypeDialog(true);
+  };
+
+  const sendImageWithType = async (isViewOnce) => {
+    if (!selectedImageFile) return;
+    
+    setShowImageTypeDialog(false);
+    const loadingToast = toast.loading('جاري إرسال الصورة...');
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64Data = reader.result;
+        await sendMessage({
+          receiver_id: selectedUser.id,
+          content: isViewOnce ? '🔒 صورة مؤقتة' : 'صورة',
+          message_type: 'image',
+          media_url: base64Data,
+          media_size: selectedImageFile.size,
+          is_view_once: isViewOnce
+        });
+        toast.dismiss(loadingToast);
+        toast.success(isViewOnce ? 'تم إرسال الصورة المؤقتة بنجاح' : 'تم إرسال الصورة بنجاح');
+        setSelectedImageFile(null);
+      };
+      reader.onerror = () => {
+        toast.dismiss(loadingToast);
+        toast.error('فشل قراءة الصورة');
+      };
+      reader.readAsDataURL(selectedImageFile);
+    } catch (error) {
+      toast.dismiss(loadingToast);
+      toast.error('فشل إرسال الصورة');
+    }
+  };
+
+  const handleViewOnceImage = async (message) => {
+    setViewOnceImage(message);
+    setViewOnceTimer(30);
+    
+    // Mark as viewed in backend
+    try {
+      await axios.post(`${API}/messages/${message.id}/mark-viewed`);
+    } catch (error) {
+      console.error('Failed to mark as viewed:', error);
+    }
+
+    // Start 30 second timer
+    viewOnceTimerRef.current = setInterval(() => {
+      setViewOnceTimer((prev) => {
+        if (prev <= 1) {
+          closeViewOnceImage();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const closeViewOnceImage = () => {
+    if (viewOnceTimerRef.current) {
+      clearInterval(viewOnceTimerRef.current);
+    }
+    setViewOnceImage(null);
+    setViewOnceTimer(30);
+  };
 
   const startCall = (isVideo) => {
     setCallType(isVideo ? 'video' : 'audio');
