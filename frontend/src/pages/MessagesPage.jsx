@@ -787,13 +787,14 @@ const MessagesPage = () => {
                                   </button>
                                 )
                               ) : (
-                                // Normal image
-                                <img 
-                                  src={message.media_url} 
-                                  alt="صورة" 
-                                  className="rounded-lg max-w-full cursor-pointer hover:opacity-90"
-                                  onClick={() => window.open(message.media_url, '_blank')}
-                                />
+                                // Normal image - fixed size
+                                <div className="w-80 h-60 cursor-pointer" onClick={() => window.open(message.media_url, '_blank')}>
+                                  <img 
+                                    src={message.media_url} 
+                                    alt="صورة" 
+                                    className="rounded-lg w-full h-full object-cover hover:opacity-90 transition-opacity"
+                                  />
+                                </div>
                               )}
                             </>
                           )}
