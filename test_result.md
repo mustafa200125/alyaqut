@@ -240,6 +240,18 @@ frontend:
           agent: "testing"
           comment: "✅ TESTED: Smooth scrolling implemented correctly. scrollToBottom function uses setTimeout(100ms) to ensure DOM updates, then scrollIntoView with smooth behavior. Called after sending messages and in useEffect when messages change."
 
+  - task: "Emoji Picker Feature"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/MessagesPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Implemented emoji picker feature with 64 emojis in 8-column grid layout. Features include: smile icon button (😊) on left side of message input, glassmorphism popup with title 'اختر إيموجي', close button (✕), scrollable grid, click outside to close, emoji insertion into message input, and proper Arabic styling. Ready for testing."
+
 backend:
   - task: "Profile Picture Upload and Save Functionality"
     implemented: true
