@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import MessagesPage from './pages/MessagesPage';
 import ExplorePage from './pages/ExplorePage';
+import SettingsPage from './pages/SettingsPage';
 import { Toaster } from './components/ui/sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
