@@ -145,6 +145,14 @@ const MessagesPage = () => {
       return;
     }
 
+    // For images, show dialog to choose normal or view-once
+    if (type === 'image') {
+      setSelectedImageFile(file);
+      setShowImageTypeDialog(true);
+      return;
+    }
+
+    // For videos, send directly (no view-once option for now)
     const loadingToast = toast.loading('جاري تحميل الملف...');
 
     try {
@@ -153,7 +161,7 @@ const MessagesPage = () => {
         const base64Data = reader.result;
         await sendMessage({
           receiver_id: selectedUser.id,
-          content: type === 'image' ? 'صورة' : 'فيديو',
+          content: 'فيديو',
           message_type: type,
           media_url: base64Data,
           media_size: file.size
@@ -170,6 +178,54 @@ const MessagesPage = () => {
       toast.dismiss(loadingToast);
       toast.error('فشل تحميل الملف');
     }
+  };
+
+  const sendImageWithType = async (isViewOnce) => {
+    if (!selectedImageFile) return;
+    
+    setShowImageTypeDialog(false);
+    const loadingToast = toast.loading('جاري إرسال الصورة...');
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64Data = reader.result;
+        await sendMessage({
+          receiver_id: selectedUser.id,
+          content: isViewOnce ? '🔒 صورة مؤقتة' : 'صورة',
+          message_type: 'image',
+          media_url: base64Data,
+          media_size: selectedImageFile.size,
+          is_view_once: isViewOnce
+        });
+        toast.dismiss(loadingToast);
+        toast.success(isViewOnce ? 'تم إرسال الصورة المؤقتة بنجاح' : 'تم إرسال الصورة بنجاح');
+        setSelectedImageFile(null);
+      };
+      reader.onerror = () => {
+        toast.dismiss(loadingToast);
+        toast.error('فشل قراءة الصورة');
+      };
+      reader.readAsDataURL(selectedImageFile);
+    } catch (error) {
+      toast.dismiss(loadingToast);
+      toast.error('فشل إرسال الصورة');
+    }
+  };
+
+  const handleViewOnceImage = async (message) => {
+    setViewOnceImage(message);
+    
+    // Mark as viewed in backend
+    try {
+      await axios.post(`${API}/messages/${message.id}/mark-viewed`);
+    } catch (error) {
+      console.error('Failed to mark as viewed:', error);
+    }
+  };
+
+  const closeViewOnceImage = () => {
+    setViewOnceImage(null);
   };
 
   const startCall = (isVideo) => {
