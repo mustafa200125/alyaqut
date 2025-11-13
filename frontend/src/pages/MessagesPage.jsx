@@ -31,7 +31,15 @@ const MessagesPage = () => {
   const [showEditNameDialog, setShowEditNameDialog] = useState(false);
   const [customName, setCustomName] = useState('');
   const [conversationCustomNames, setConversationCustomNames] = useState({});
+  const [showImageMenu, setShowImageMenu] = useState(false);
+  const [showImageTypeDialog, setShowImageTypeDialog] = useState(false);
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+  const [viewOnceImage, setViewOnceImage] = useState(null);
+  const [viewOnceTimer, setViewOnceTimer] = useState(30);
   const messagesEndRef = useRef(null);
+  const imageInputRef = useRef(null);
+  const imageMenuRef = useRef(null);
+  const viewOnceTimerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingIntervalRef = useRef(null);
