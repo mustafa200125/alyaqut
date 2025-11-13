@@ -827,19 +827,14 @@ const MessagesPage = () => {
                         )}
                       </Button>
                   </div>
-                  )}
-                  <p className="text-xs text-slate-400 text-center">
-                    الصور: حتى 50 ميجابايت | الفيديوهات: حتى 500 ميجابايت | الرسائل الصوتية بجودة عالية
-                  </p>
-                </div>
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <p className="text-slate-400">اختر محادثة للبدء</p>
+                )}
+                <p className="text-xs text-slate-400 text-center mt-2">
+                  الصور: حتى 50 ميجابايت | الفيديوهات: حتى 500 ميجابايت | الرسائل الصوتية بجودة عالية
+                </p>
               </div>
-            )}
+            </div>
           </Card>
-        </div>
+        )}
       </div>
 
       {/* Video Call Dialog */}
