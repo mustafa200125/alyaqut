@@ -38,6 +38,7 @@ const MessagesPage = () => {
   const [viewOnceTimer, setViewOnceTimer] = useState(30);
   const messagesEndRef = useRef(null);
   const imageInputRef = useRef(null);
+  const videoInputRef = useRef(null);
   const imageMenuRef = useRef(null);
   const viewOnceTimerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
