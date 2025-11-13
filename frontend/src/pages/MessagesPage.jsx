@@ -181,6 +181,21 @@ const MessagesPage = () => {
 
   const startRecording = async () => {
     try {
+      // Check if media devices are available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        toast.error('متصفحك لا يدعم تسجيل الصوت. يرجى استخدام HTTPS أو متصفح حديث.');
+        return;
+      }
+
+      // Check if microphone is available
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const hasMicrophone = devices.some(device => device.kind === 'audioinput');
+      
+      if (!hasMicrophone) {
+        toast.error('لم يتم العثور على ميكروفون. يرجى توصيل ميكروفون والمحاولة مرة أخرى.');
+        return;
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ 
         audio: {
           echoCancellation: true,
@@ -190,8 +205,24 @@ const MessagesPage = () => {
         } 
       });
       
+      // Determine best supported mime type
+      let mimeType = 'audio/webm;codecs=opus';
+      if (!MediaRecorder.isTypeSupported(mimeType)) {
+        if (MediaRecorder.isTypeSupported('audio/webm')) {
+          mimeType = 'audio/webm';
+        } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+          mimeType = 'audio/mp4';
+        } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
+          mimeType = 'audio/ogg';
+        } else {
+          toast.error('متصفحك لا يدعم تسجيل الصوت');
+          stream.getTracks().forEach(track => track.stop());
+          return;
+        }
+      }
+      
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus',
+        mimeType: mimeType,
         audioBitsPerSecond: 128000
       });
       
