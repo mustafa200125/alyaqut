@@ -722,8 +722,12 @@ const MessagesPage = () => {
                                 ) : (
                                   // Receiver can view once
                                   <button
-                                    onClick={() => handleViewOnceImage(message)}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleViewOnceImage(message);
+                                    }}
                                     className="w-80 h-60 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition-colors flex flex-col items-center justify-center"
+                                    style={{ pointerEvents: 'auto' }}
                                   >
                                     <div className="text-4xl mb-2">🔒</div>
                                     <p className="text-sm">اضغط لعرض الصورة المؤقتة</p>
@@ -732,7 +736,14 @@ const MessagesPage = () => {
                                 )
                               ) : (
                                 // Normal image
-                                <div className="w-80 h-60 cursor-pointer" onClick={() => window.open(message.media_url, '_blank')}>
+                                <div 
+                                  className="w-80 h-60 cursor-pointer" 
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    window.open(message.media_url, '_blank');
+                                  }}
+                                  style={{ pointerEvents: 'auto' }}
+                                >
                                   <img 
                                     src={message.media_url} 
                                     alt="صورة" 
