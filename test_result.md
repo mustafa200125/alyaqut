@@ -321,12 +321,17 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Real-time Message Updates with Polling"
-    - "Optimistic UI Updates for Sending Messages"
-    - "Improved Loading States and Feedback"
-  stuck_tasks: []
+    - "Voice Message Recording Functionality"
+    - "Audio Call Functionality"
+    - "Video Call Functionality"
+    - "Authentication System for Voice Testing"
+  stuck_tasks:
+    - "Voice Message Recording Functionality"
+    - "Audio Call Functionality" 
+    - "Video Call Functionality"
+    - "Authentication System for Voice Testing"
   test_all: false
-  test_priority: "high_first"
+  test_priority: "stuck_first"
 
 agent_communication:
     - agent: "main"
