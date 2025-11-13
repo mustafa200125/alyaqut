@@ -801,6 +801,46 @@ const MessagesPage = () => {
                   ) : (
                     /* Normal Input Interface */
                     <div className="flex gap-2">
+                      {/* Hidden image input */}
+                      <input
+                        type="file"
+                        ref={imageInputRef}
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleImageSelect}
+                      />
+                      
+                      {/* Three dots menu for images */}
+                      <div className="relative" ref={imageMenuRef}>
+                        <Button
+                          onClick={() => setShowImageMenu(!showImageMenu)}
+                          size="sm"
+                          variant="outline"
+                          className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                          title="إرسال صورة"
+                        >
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+
+                        {/* Image Menu Dropdown */}
+                        {showImageMenu && (
+                          <div className="absolute bottom-full left-0 mb-2 glass-effect rounded-lg border border-slate-700 shadow-xl z-50 min-w-[180px]">
+                            <div className="p-2">
+                              <button
+                                onClick={() => {
+                                  imageInputRef.current.click();
+                                  setShowImageMenu(false);
+                                }}
+                                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors text-right"
+                              >
+                                <Image className="w-5 h-5 text-blue-400" />
+                                <span className="text-white font-medium">إرسال صورة</span>
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
                       <Button
                         onClick={startRecording}
                         size="sm"
