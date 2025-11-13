@@ -34,8 +34,11 @@ const MessagesPage = () => {
   const [showEditNameDialog, setShowEditNameDialog] = useState(false);
   const [customName, setCustomName] = useState('');
   const [conversationCustomNames, setConversationCustomNames] = useState({});
+  const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
   const fileInputRef = useRef(null);
+  const videoInputRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const attachmentMenuRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingIntervalRef = useRef(null);
