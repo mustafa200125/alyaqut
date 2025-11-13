@@ -631,8 +631,8 @@ const MessagesPage = () => {
                   </Avatar>
                 </div>
                 
-                {/* Left Side - Back Button */}
-                <div className="order-1">
+                {/* Left Side - Back Button & Call Buttons */}
+                <div className="order-1 flex items-center gap-3">
                   <Button
                     variant="ghost"
                     onClick={() => setSelectedUser(null)}
@@ -641,10 +641,9 @@ const MessagesPage = () => {
                   >
                     <ArrowLeft className="w-6 h-6" />
                   </Button>
-                </div>
-                
-                {/* Call Buttons */}
-                <div className="flex gap-2">
+                  
+                  {/* Call Buttons */}
+                  <div className="flex gap-2">
                     <Button
                       onClick={() => startCall(false)}
                       size="sm"
