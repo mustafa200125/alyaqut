@@ -331,6 +331,22 @@ const MessagesPage = () => {
     setViewOnceTimer(30);
   };
 
+  const downloadMedia = (mediaUrl, filename, type) => {
+    try {
+      // Create a temporary anchor element
+      const link = document.createElement('a');
+      link.href = mediaUrl;
+      link.download = filename || `${type}_${Date.now()}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success(`تم حفظ ${type === 'image' ? 'الصورة' : 'الفيديو'} بنجاح`);
+    } catch (error) {
+      console.error('Download error:', error);
+      toast.error('فشل الحفظ. حاول مرة أخرى');
+    }
+  };
+
   const startCall = (isVideo) => {
     setCallType(isVideo ? 'video' : 'audio');
     setShowCallDialog(true);
