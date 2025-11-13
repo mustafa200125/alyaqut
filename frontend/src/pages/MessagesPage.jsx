@@ -457,64 +457,82 @@ const MessagesPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <Button
-          data-testid="back-to-home-btn"
-          variant="ghost"
-          onClick={() => navigate('/home')}
-          className="mb-6 text-slate-200 hover:text-white"
-        >
-          <ArrowLeft className="w-5 h-5 mr-2" />
-          عودة
-        </Button>
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Show conversations list or chat view */}
+        {!selectedUser ? (
+          /* Conversations List View */
+          <>
+            <Button
+              data-testid="back-to-home-btn"
+              variant="ghost"
+              onClick={() => navigate('/home')}
+              className="mb-6 text-slate-200 hover:text-white"
+            >
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              عودة للرئيسية
+            </Button>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
-          <Card className="glass-effect border-slate-700 p-4 col-span-1">
-            <h2 className="text-xl font-bold text-white mb-4" style={{fontFamily: 'Playfair Display'}}>
-              المحادثات
-            </h2>
-            <ScrollArea className="h-[calc(100vh-300px)]">
-              <div className="space-y-2">
-                {conversations.length === 0 ? (
-                  <p className="text-slate-400 text-center py-8">لا توجد محادثات</p>
-                ) : (
-                  conversations.map((conv) => (
-                    <div
-                      key={conv.partner.id}
-                      data-testid="conversation-item"
-                      onClick={() => handleSelectUser(conv.partner)}
-                      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-slate-700/50 ${
-                        selectedUser?.id === conv.partner.id ? 'bg-slate-700/50' : ''
-                      }`}
-                    >
-                      <Avatar>
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white">
-                          {conv.partner.username[0]?.toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-white truncate">{conv.partner.username}</p>
-                        <p className="text-sm text-slate-400 truncate">
-                          {conv.last_message.content}
-                        </p>
-                      </div>
-                      {conv.unread_count > 0 && (
-                        <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-xs text-white">
-                          {conv.unread_count}
-                        </div>
-                      )}
+            <Card className="glass-effect border-slate-700 p-6">
+              <h2 className="text-2xl font-bold text-white mb-6" style={{fontFamily: 'Playfair Display'}}>
+                المحادثات
+              </h2>
+              <ScrollArea className="h-[calc(100vh-250px)]">
+                <div className="space-y-3">
+                  {conversations.length === 0 ? (
+                    <div className="text-center py-16">
+                      <p className="text-slate-400 text-lg mb-2">لا توجد محادثات بعد</p>
+                      <p className="text-slate-500 text-sm">ابدأ محادثة جديدة من صفحة الاستكشاف</p>
                     </div>
-                  ))
-                )}
-              </div>
-            </ScrollArea>
-          </Card>
-
-          <Card className="glass-effect border-slate-700 p-6 col-span-1 md:col-span-2 flex flex-col">
-            {selectedUser ? (
-              <>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
+                  ) : (
+                    conversations.map((conv) => (
+                      <div
+                        key={conv.partner.id}
+                        data-testid="conversation-item"
+                        onClick={() => handleSelectUser(conv.partner)}
+                        className="flex items-center gap-4 p-4 rounded-xl cursor-pointer hover:bg-slate-700/50 transition-all border border-transparent hover:border-blue-500/30"
+                      >
+                        <Avatar className="w-14 h-14">
+                          {conv.partner.avatar_url ? (
+                            <img src={conv.partner.avatar_url} alt={conv.partner.username} className="w-full h-full object-cover" />
+                          ) : (
+                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white text-lg">
+                              {conv.partner.username[0]?.toUpperCase()}
+                            </AvatarFallback>
+                          )}
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-white text-lg truncate">{conv.partner.username}</p>
+                          <p className="text-sm text-slate-400 truncate">
+                            {conv.last_message.content}
+                          </p>
+                        </div>
+                        {conv.unread_count > 0 && (
+                          <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-sm font-bold text-white">
+                            {conv.unread_count}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+              </ScrollArea>
+            </Card>
+          </>
+        ) : (
+          /* Full Screen Chat View */
+          <Card className="glass-effect border-slate-700 flex flex-col h-[calc(100vh-100px)]">
+            {/* Chat Header */}
+            <div className="p-6 border-b border-slate-700">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="ghost"
+                    onClick={() => setSelectedUser(null)}
+                    className="text-slate-200 hover:text-white p-2"
+                    title="العودة للمحادثات"
+                  >
+                    <ArrowLeft className="w-6 h-6" />
+                  </Button>
                     <Avatar>
                       {selectedUser.avatar_url ? (
                         <img src={selectedUser.avatar_url} alt={selectedUser.username} className="w-full h-full object-cover" />
