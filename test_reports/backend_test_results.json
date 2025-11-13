@@ -1,105 +1,123 @@
 {
   "summary": {
-    "total_tests": 16,
+    "total_tests": 19,
     "passed_tests": 16,
-    "success_rate": "100.0%"
+    "success_rate": "84.2%"
   },
   "results": [
+    {
+      "test": "Register voicetest@test.com",
+      "success": false,
+      "details": "Status: 400 (Expected: 200) - Email already registered",
+      "timestamp": "2025-11-13T13:45:20.635076"
+    },
+    {
+      "test": "Check Users in Database",
+      "success": false,
+      "details": "No authentication token available",
+      "timestamp": "2025-11-13T13:45:20.635590"
+    },
+    {
+      "test": "Login Existing User (test1@test.com)",
+      "success": false,
+      "details": "Status: 401 (Expected: 200) - Invalid credentials",
+      "timestamp": "2025-11-13T13:45:20.675127"
+    },
     {
       "test": "User Registration",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:45.413751"
+      "timestamp": "2025-11-13T13:45:20.942440"
     },
     {
       "test": "Email Verification",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:45.455149"
+      "timestamp": "2025-11-13T13:45:20.993622"
     },
     {
       "test": "Get Current User",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:45.495603"
+      "timestamp": "2025-11-13T13:45:21.031743"
     },
     {
       "test": "Create Post",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:45.531301"
+      "timestamp": "2025-11-13T13:45:21.079535"
     },
     {
       "test": "Get Posts",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:45.575273"
+      "timestamp": "2025-11-13T13:45:21.122572"
     },
     {
       "test": "Like Post",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:45.639803"
+      "timestamp": "2025-11-13T13:45:21.167112"
     },
     {
       "test": "Unlike Post",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:45.679083"
+      "timestamp": "2025-11-13T13:45:21.206516"
     },
     {
       "test": "Add Comment",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:45.744921"
+      "timestamp": "2025-11-13T13:45:21.251979"
     },
     {
       "test": "Get Comments",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:45.785048"
+      "timestamp": "2025-11-13T13:45:21.289317"
     },
     {
       "test": "Get User Suggestions",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:45.826629"
+      "timestamp": "2025-11-13T13:45:21.330973"
     },
     {
       "test": "AI Content Suggestions",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:48.107672"
+      "timestamp": "2025-11-13T13:45:23.287801"
     },
     {
       "test": "AI Content Moderation",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:49.165919"
+      "timestamp": "2025-11-13T13:45:23.687681"
     },
     {
       "test": "AI Generate Hashtags",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:49.956255"
+      "timestamp": "2025-11-13T13:45:24.774221"
     },
     {
       "test": "Get Conversations",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:50.035979"
+      "timestamp": "2025-11-13T13:45:24.814267"
     },
     {
       "test": "Get Stories",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:50.074734"
+      "timestamp": "2025-11-13T13:45:24.849462"
     },
     {
       "test": "User Login",
       "success": true,
       "details": "Status: 200",
-      "timestamp": "2025-11-12T13:57:50.333834"
+      "timestamp": "2025-11-13T13:45:25.115082"
     }
   ]
 }
