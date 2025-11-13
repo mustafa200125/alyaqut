@@ -876,13 +876,17 @@ async def get_conversations(current_user: dict = Depends(get_current_user)):
     return result
 
 @api_router.get("/messages/{user_id}", response_model=List[Message])
-async def get_messages_with_user(user_id: str, current_user: dict = Depends(get_current_user)):
+async def get_messages_with_user(user_id: str, limit: int = 100, current_user: dict = Depends(get_current_user)):
+    # Limit to last 100 messages for better performance
     messages = await db.messages.find({
         "$or": [
             {"sender_id": current_user['id'], "receiver_id": user_id},
             {"sender_id": user_id, "receiver_id": current_user['id']}
         ]
-    }, {"_id": 0}).sort("created_at", 1).to_list(1000)
+    }, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    # Reverse to get chronological order
+    messages.reverse()
     
     for msg in messages:
         if msg['created_at']:
