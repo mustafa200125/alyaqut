@@ -735,6 +735,29 @@ const MessagesPage = () => {
                               : 'bg-slate-700 text-white'
                           } ${message.sending ? 'animate-pulse' : ''}`}
                         >
+                          {/* Video display */}
+                          {message.message_type === 'video' && message.media_url && (
+                            <div className="w-80 h-60 bg-slate-800/50 rounded-lg overflow-hidden">
+                              {message.media_url && message.media_url.startsWith('data:video') ? (
+                                <video 
+                                  src={message.media_url} 
+                                  controls 
+                                  className="rounded-lg w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.target.style.display = 'none';
+                                  }}
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                  <div className="text-center">
+                                    <p className="text-2xl mb-2">⚠️</p>
+                                    <p className="text-sm">خطأ في عرض الفيديو</p>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
                           {/* Image display */}
                           {message.message_type === 'image' && message.media_url && (
                             <>
