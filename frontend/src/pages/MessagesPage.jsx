@@ -28,17 +28,10 @@ const MessagesPage = () => {
   const [audioBlob, setAudioBlob] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [showImageTypeDialog, setShowImageTypeDialog] = useState(false);
-  const [selectedImageFile, setSelectedImageFile] = useState(null);
-  const [viewOnceImage, setViewOnceImage] = useState(null);
   const [showEditNameDialog, setShowEditNameDialog] = useState(false);
   const [customName, setCustomName] = useState('');
   const [conversationCustomNames, setConversationCustomNames] = useState({});
-  const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
-  const fileInputRef = useRef(null);
-  const videoInputRef = useRef(null);
   const messagesEndRef = useRef(null);
-  const attachmentMenuRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingIntervalRef = useRef(null);
