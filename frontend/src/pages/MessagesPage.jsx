@@ -61,6 +61,20 @@ const MessagesPage = () => {
     try {
       const response = await axios.get(`${API}/messages/conversations`);
       setConversations(response.data);
+      
+      // Load custom names for all conversations
+      const customNames = {};
+      for (const conv of response.data) {
+        try {
+          const nameResponse = await axios.get(`${API}/conversations/custom-name/${conv.partner.id}`);
+          if (nameResponse.data.custom_name) {
+            customNames[conv.partner.id] = nameResponse.data.custom_name;
+          }
+        } catch (error) {
+          console.error('Failed to load custom name for', conv.partner.id);
+        }
+      }
+      setConversationCustomNames(customNames);
     } catch (error) {
       console.error('Failed to fetch conversations:', error);
     }
