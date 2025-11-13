@@ -105,6 +105,54 @@
 user_problem_statement: "Make messaging send and receive smooth - تحسين سلاسة إرسال واستقبال الرسائل"
 
 frontend:
+  - task: "Voice Message Recording Functionality"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/pages/MessagesPage.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "❌ CRITICAL ISSUE: Voice recording functionality fails due to 'NotFoundError: Requested device not found'. MediaRecorder API is supported (audio/webm;codecs=opus: true, audio/webm: true, audio/mp4: true) and HTTPS context is secure, but getUserMedia fails to access microphone. Code implementation is correct with proper error handling, MIME type configuration, and UI states. Issue appears to be environment-related (no audio devices available in testing container) rather than code defect."
+
+  - task: "Audio Call Functionality"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/components/VideoCallDialog.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "❌ CRITICAL ISSUE: Audio call functionality fails due to 'NotFoundError: Requested device not found'. VideoCallDialog component properly implements getUserMedia with audio constraints, mute/unmute controls, and call management. Screen sharing API is supported. Issue is environment-related (no audio/video devices in testing container) rather than code implementation."
+
+  - task: "Video Call Functionality"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/components/VideoCallDialog.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "❌ CRITICAL ISSUE: Video call functionality fails due to 'NotFoundError: Requested device not found'. Code properly implements video constraints (1920x1080, 30fps), local/remote video elements, video toggle controls, and screen sharing. Issue is environment-related (no camera/microphone devices in testing container) rather than code defect."
+
+  - task: "Authentication System for Voice Testing"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/pages/AuthPage.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "❌ AUTHENTICATION FAILURE: Registration and login attempts result in 401 Unauthorized errors. Backend logs show 'POST /api/auth/login HTTP/1.1 401 Unauthorized'. This prevents access to Messages page where voice functionality is located. Voice UI components (data-testid='voice-record-btn', 'audio-call-btn', 'video-call-btn') exist in code but are not accessible due to auth failures."
+
   - task: "Real-time Message Updates with Polling"
     implemented: true
     working: true
