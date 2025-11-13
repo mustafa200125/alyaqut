@@ -1039,7 +1039,7 @@ const MessagesPage = () => {
                   </div>
                 )}
                 <p className="text-xs text-slate-400 text-center mt-2">
-                  الصور بجودة أصلية | الصور المؤقتة تظهر 30 ثانية فقط
+                  الصور والفيديوهات بجودة أصلية | الصور المؤقتة 30 ثانية فقط
                 </p>
               </div>
             </div>
