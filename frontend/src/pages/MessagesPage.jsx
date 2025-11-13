@@ -31,6 +31,9 @@ const MessagesPage = () => {
   const [showImageTypeDialog, setShowImageTypeDialog] = useState(false);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const [viewOnceImage, setViewOnceImage] = useState(null);
+  const [showEditNameDialog, setShowEditNameDialog] = useState(false);
+  const [customName, setCustomName] = useState('');
+  const [conversationCustomNames, setConversationCustomNames] = useState({});
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
