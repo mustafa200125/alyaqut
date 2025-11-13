@@ -817,7 +817,8 @@ async def send_message(message_data: MessageCreate, current_user: dict = Depends
         content=message_data.content,
         message_type=message_data.message_type or "text",
         media_url=message_data.media_url,
-        media_size=message_data.media_size
+        media_size=message_data.media_size,
+        is_view_once=message_data.is_view_once or False
     )
     
     message_dict = message.model_dump()
