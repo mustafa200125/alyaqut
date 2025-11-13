@@ -1034,6 +1034,71 @@ const MessagesPage = () => {
           </div>
         </div>
       )}
+
+      {/* Edit Conversation Name Dialog */}
+      {showEditNameDialog && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+          <Card className="glass-effect border-slate-700 p-6 max-w-md w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-white">تعديل اسم المحادثة</h2>
+              <button
+                onClick={() => setShowEditNameDialog(false)}
+                className="text-slate-400 hover:text-white text-2xl"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <p className="text-slate-300 text-sm mb-4">
+              قم بتخصيص اسم هذه المحادثة لتسهيل التعرف عليها
+            </p>
+            
+            <div className="mb-6">
+              <label className="text-sm text-slate-400 mb-2 block">اسم المحادثة</label>
+              <Input
+                value={customName}
+                onChange={(e) => setCustomName(e.target.value)}
+                placeholder="أدخل اسم المحادثة..."
+                className="bg-slate-800/50 border-slate-600 text-white"
+                onKeyPress={(e) => e.key === 'Enter' && saveConversationName()}
+              />
+              {conversationCustomNames[selectedUser?.id] && (
+                <p className="text-xs text-slate-500 mt-2">
+                  الاسم الأصلي: {selectedUser?.username}
+                </p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Button
+                onClick={saveConversationName}
+                className="w-full btn-sapphire"
+                disabled={!customName.trim()}
+              >
+                حفظ الاسم
+              </Button>
+              
+              {conversationCustomNames[selectedUser?.id] && (
+                <Button
+                  onClick={resetConversationName}
+                  variant="outline"
+                  className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
+                >
+                  إعادة تعيين للاسم الأصلي
+                </Button>
+              )}
+              
+              <Button
+                onClick={() => setShowEditNameDialog(false)}
+                variant="ghost"
+                className="w-full text-slate-400 hover:text-white"
+              >
+                إلغاء
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
