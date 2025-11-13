@@ -105,6 +105,67 @@
 user_problem_statement: "Make messaging send and receive smooth - تحسين سلاسة إرسال واستقبال الرسائل"
 
 frontend:
+  - task: "Real-time Message Updates with Polling"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/MessagesPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Added automatic polling every 2 seconds to fetch new messages when a conversation is active. Polling starts when user selects a chat and stops when switching chats or unmounting component."
+
+  - task: "Optimistic UI Updates for Sending Messages"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/MessagesPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Messages now appear instantly in the UI before server confirmation (optimistic update). If sending fails, the message is removed. This makes the chat feel more responsive."
+
+  - task: "Improved Loading States and Feedback"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/MessagesPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Added loading spinner on send button while message is being sent. Send button is disabled during sending and when message is empty. Input is also disabled during sending."
+
+  - task: "Better Toast Notifications for File/Audio Upload"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/MessagesPage.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Changed to loading toasts that can be dismissed when upload completes. Better user feedback for file and voice message uploads."
+
+  - task: "Smooth Scroll to Bottom"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/MessagesPage.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Added 100ms delay to scrollToBottom to ensure DOM has updated. Smooth scrolling behavior for better UX."
+
+backend:
   - task: "Profile Picture Upload and Save Functionality"
     implemented: true
     working: true
