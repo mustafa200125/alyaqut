@@ -108,7 +108,7 @@ const MessagesPage = () => {
         console.error('Failed to load custom name:', error);
       }
       
-      // Start polling for new messages every 2 seconds
+      // Start polling for new messages every 4 seconds (reduced frequency for better performance)
       pollingIntervalRef.current = setInterval(async () => {
         try {
           const response = await axios.get(`${API}/messages/${partner.id}`);
@@ -116,7 +116,7 @@ const MessagesPage = () => {
         } catch (error) {
           console.error('Polling error:', error);
         }
-      }, 2000);
+      }, 4000);
       
     } catch (error) {
       toast.error('فشل تحميل الرسائل');
