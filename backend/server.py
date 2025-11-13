@@ -883,6 +883,30 @@ async def get_messages_with_user(user_id: str, current_user: dict = Depends(get_
     
     return messages
 
+@api_router.post("/messages/{message_id}/mark-viewed")
+async def mark_message_viewed(message_id: str, current_user: dict = Depends(get_current_user)):
+    """Mark a view-once message as viewed"""
+    message = await db.messages.find_one({"id": message_id})
+    
+    if not message:
+        raise HTTPException(status_code=404, detail="Message not found")
+    
+    # Only the receiver can mark as viewed
+    if message['receiver_id'] != current_user['id']:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Only mark view-once messages
+    if not message.get('is_view_once', False):
+        raise HTTPException(status_code=400, detail="Not a view-once message")
+    
+    # Mark as viewed
+    await db.messages.update_one(
+        {"id": message_id},
+        {"$set": {"viewed_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    return {"message": "Marked as viewed"}
+
 
 # =============== Stories Routes ===============
 
