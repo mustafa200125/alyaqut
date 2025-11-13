@@ -764,11 +764,11 @@ const MessagesPage = () => {
                                   </div>
                                 ) : message.sender_id === user.id ? (
                                   // Sender sees the image normally
-                                  <div className="relative">
+                                  <div className="relative w-80 h-60">
                                     <img 
                                       src={message.media_url} 
                                       alt="صورة مؤقتة" 
-                                      className="rounded-lg max-w-full opacity-70"
+                                      className="rounded-lg w-full h-full object-cover opacity-70"
                                     />
                                     <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs flex items-center gap-1">
                                       <span>🔒</span>
